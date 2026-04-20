@@ -3,126 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>360° Führungsfeedback – Fremdeinschätzung | Universität Basel</title>
+  <title>360° Führungsbericht | Universität Basel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=PT+Serif&display=swap" rel="stylesheet">
   <style>
     :root {
-      --red:        #d20537;
-      --teal:       #a5d7d2;
-      --trap:       #5D666D;
-      --grey-light: #d0d0d0;
-      --grey-dark:  #222;
-      --hellrot:    #eb829b;
-      --col-1: #d21039; --col-2: #bebec8; --col-3: #006f6f; --col-4: #eb829b; --col-5: #1EA5A5;
-      --max-w: 1280px; --pad-l: 284px; --pad-r: 282px;
+      --red:   #d20537; --teal: #a5d7d2; --trap: #5D666D;
+      --grey-light: #d0d0d0; --grey-dark: #222; --hellrot: #eb829b;
+      --col-1:#d21039; --col-2:#bebec8; --col-3:#006f6f; --col-4:#eb829b; --col-5:#1EA5A5;
+      --self-color: #1a56db; --fremd-color: #d20537;
+      --max-w: 1280px; --pad-l: 200px; --pad-r: 200px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; font-size: 12px; background: #fff; color: #000; }
 
     .nav { background: var(--teal); }
-    .nav__inner { max-width: var(--max-w); margin: 0 auto; height: 181px; display: flex; align-items: center; padding: 0 49px; }
-    .nav__logo svg { display: block; height: 75px; width: auto; }
+    .nav__inner { max-width: var(--max-w); margin: 0 auto; height: 120px; display: flex; align-items: center; padding: 0 48px; gap: 24px; }
+    .nav__logo svg { height: 60px; width: auto; }
+    .nav__info { margin-left: 32px; }
+    .nav__title { font-family: 'PT Serif', serif; font-size: 18px; }
+    .nav__sub { font-size: 11px; color: var(--trap); margin-top: 3px; }
+    .nav__actions { margin-left: auto; display: flex; gap: 10px; }
 
-    .page { max-width: var(--max-w); margin: 0 auto; padding-bottom: 4rem; }
+    .page { max-width: var(--max-w); margin: 0 auto; padding: 0 48px 80px; }
 
-    .intro { padding: 39px 0 0; margin-left: var(--pad-l); margin-right: var(--pad-r); }
-    .intro__title { font-family: 'PT Serif', serif; font-size: 25px; font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
-    .intro__person { background: #f4f6fb; border-left: 4px solid var(--teal); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
-    .intro__person strong { display: block; font-size: 15px; margin-bottom: 2px; }
-    .intro__body { line-height: 1.6; }
-    .intro__body p + p { margin-top: .75em; }
+    /* REPORT HEADER */
+    .report-header { background: var(--grey-dark); color: #fff; padding: 40px 48px; margin-bottom: 0; }
+    .report-header__label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 8px; }
+    .report-header__name { font-family: 'PT Serif', serif; font-size: 32px; font-weight: 400; margin-bottom: 4px; }
+    .report-header__meta { font-size: 12px; color: #aaa; margin-bottom: 20px; }
+    .report-header__stats { display: flex; gap: 32px; }
+    .report-stat { }
+    .report-stat__val { font-size: 28px; font-weight: 300; font-family: 'PT Serif', serif; }
+    .report-stat__lbl { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: .06em; }
 
-    .scale-legend { margin: 32px 0 52px var(--pad-l); max-width: 563px; }
-    .scale-legend__heading { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
-    .scale-legend__grid { display: flex; }
-    .scale-legend__col { flex: 1; border-left: 1px solid var(--grey-light); padding: 6px 4px 6px 8px; text-align: center; }
-    .scale-legend__col:last-child { border-right: 1px solid var(--grey-light); }
-    .scale-legend__sym { display: block; font-size: 14px; margin-bottom: 6px; }
-    .scale-legend__lbl { display: block; }
+    /* LEGEND */
+    .legend-bar { display: flex; align-items: center; gap: 24px; padding: 14px 48px; background: #f4f6fb; border-bottom: 1px solid var(--grey-light); font-size: 11px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-self  { background: var(--self-color); }
+    .legend-fremd { background: var(--fremd-color); }
+    .legend-dots  { background: #bbb; }
 
-    .q-section { display: flex; align-items: flex-start; padding: 3rem var(--pad-r) 56px 142px; }
-    .q-section__icon { width: 100px; flex-shrink: 0; }
-    .q-section__body { flex: 1; margin-left: 39px; }
-    .q-section__head { display: flex; align-items: baseline; border-bottom: 2px solid var(--border-color); margin-bottom: 16px; }
-    .q-section__num { font-size: 40px; font-weight: 300; color: var(--red); line-height: 1; width: 26px; flex-shrink: 0; }
-    .q-section__title { font-size: 18px; font-weight: 700; line-height: 1.2; padding: 10px; }
+    /* SECTION */
+    .section-block { padding: 48px 0 32px; border-bottom: 1px solid var(--grey-light); }
+    .section-head { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-left: var(--pad-l); }
+    .section-head__icon { width: 64px; flex-shrink: 0; }
+    .section-head__body { }
+    .section-head__num { font-size: 32px; font-weight: 300; color: var(--red); line-height: 1; }
+    .section-head__title { font-size: 20px; font-weight: 700; }
+    .section-head__avgs { display: flex; gap: 16px; margin-top: 6px; font-size: 11px; }
+    .avg-chip { padding: 2px 8px; border-radius: 2px; font-weight: 700; }
+    .avg-self  { background: #dce8fd; color: var(--self-color); }
+    .avg-fremd { background: #fde8ea; color: var(--fremd-color); }
 
-    .q-subsection { --border-color: var(--grey-light); }
-    .q-subsection.trap { --border-color: var(--trap); }
-    .q-subsection__hdr { display: flex; align-items: center; padding: 8px 0; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
-    .q-subsection__indent { width: 26px; flex-shrink: 0; }
-    .q-subsection__name { font-size: 14px; font-weight: 700; flex: 1; }
-    .q-subsection__name.trap { color: var(--trap); font-style: italic; }
-    .rating-hdr { display: flex; width: 197px; flex-shrink: 0; justify-content: space-around; }
-    .rating-hdr span { font-size: 14px; text-align: center; min-width: 24px; }
+    /* SUBSECTION CHART ROW */
+    .subsection-rows { padding: 0 var(--pad-r) 0 var(--pad-l); }
+    .sub-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+    .sub-row:last-child { border-bottom: none; }
+    .sub-row__name { width: 220px; flex-shrink: 0; font-size: 12px; font-weight: 700; line-height: 1.3; }
+    .sub-row__name.trap { color: var(--trap); font-style: italic; }
+    .sub-row__chart { flex: 1; position: relative; height: 28px; }
+    .sub-row__track { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; height: 1px; background: var(--grey-light); }
+    .sub-row__grid { position: absolute; top: 0; bottom: 0; display: flex; justify-content: space-between; left: 0; right: 0; pointer-events: none; }
+    .sub-row__grid-line { width: 1px; background: #f0f0f0; }
+    .sub-row__grid-line.teal { background: rgba(165,215,210,.5); }
+    .sub-row__dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; }
+    .sub-row__dot--self  { background: var(--self-color); z-index: 3; }
+    .sub-row__dot--fremd { background: var(--fremd-color); z-index: 2; }
+    .sub-row__dot--ext   { background: #bbb; width: 8px; height: 8px; z-index: 1; opacity: .7; }
+    .sub-row__line { position: absolute; top: 50%; height: 2px; transform: translateY(-50%); background: rgba(210,5,55,.2); z-index: 0; }
+    .sub-row__vals { width: 100px; flex-shrink: 0; display: flex; gap: 6px; font-size: 11px; font-weight: 700; }
+    .val-self  { color: var(--self-color); }
+    .val-fremd { color: var(--fremd-color); }
+    .sub-row__gap { width: 80px; flex-shrink: 0; font-size: 10px; text-align: center; padding: 2px 6px; }
+    .gap--blind  { background: #fde8ea; color: #c00; font-weight: 700; } /* self > fremd */
+    .gap--hidden { background: #e6f4ea; color: #1a7a3a; font-weight: 700; } /* fremd > self */
+    .gap--ok     { color: #888; }
 
-    .q-list { border: 1px solid var(--border-color); border-top: none; margin-bottom: 32px; }
-    .q-row { display: flex; align-items: flex-start; padding: 10px 0; padding-left: 26px; border-bottom: 1px solid #f0f0f0; }
-    .q-row:last-child { border-bottom: none; }
-    .q-row__num { flex-shrink: 0; min-width: 1.5rem; text-align: right; padding-right: .5rem; padding-top: 1px; color: var(--grey-light); }
-    .q-row__text { flex: 1; line-height: 1.4; padding-right: 8px; }
-    .q-row__text.trap { color: var(--trap); font-style: italic; }
-    .q-row__inputs { display: flex; width: 197px; flex-shrink: 0; justify-content: space-around; align-items: flex-start; padding-top: 2px; }
+    /* SPIDER */
+    .spider-wrap { padding: 40px var(--pad-l); }
+    .spider-wrap h2 { font-family: 'PT Serif', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; }
+    .spider-wrap p { font-size: 12px; color: var(--trap); margin-bottom: 24px; line-height: 1.5; }
+    .spider-charts { display: flex; gap: 48px; flex-wrap: wrap; }
 
-    input[type="radio"] { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; min-width: 14px; border: 1.5px solid #000; border-radius: 50%; cursor: pointer; transition: border-color .15s, background-color .15s; }
-    input[type="radio"]:hover { border-color: var(--red); }
-    input[type="radio"]:checked { border-color: var(--red); background-color: var(--red); box-shadow: inset 0 0 0 3px #fff; }
+    /* GAP ANALYSIS */
+    .gap-summary { margin: 0 var(--pad-l); padding: 28px; background: #f4f6fb; margin-bottom: 32px; }
+    .gap-summary h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .gap-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .gap-table th { text-align: left; font-weight: 700; padding: 6px 12px; background: #e8edf5; }
+    .gap-table td { padding: 6px 12px; border-bottom: 1px solid #e0e8f0; }
+    .gap-table tr:last-child td { border-bottom: none; }
 
-    .sr-section { padding: 0 var(--pad-r) 16px var(--pad-l); }
-    .sr__h2 { font-size: 18px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
-    .sr__divider { border: none; border-top: 1px dashed #000; margin: 0 0 28px; }
-    .sr__question { margin-bottom: 24px; }
-    .sr__label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
-    .sr__textarea { width: 100%; min-height: 80px; border: 1.5px solid #c8d4ea; padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px; resize: vertical; outline: none; }
-    .sr__textarea:focus { border-color: var(--grey-dark); }
+    /* REMARKS */
+    .remarks-block { padding: 32px var(--pad-l); border-top: 1px solid var(--grey-light); }
+    .remarks-block h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid var(--grey-light); padding-bottom: 8px; }
+    .remarks-block p { line-height: 1.6; margin-bottom: 10px; font-size: 12px; }
 
-    .actions { padding: 24px var(--pad-r) 16px var(--pad-l); display: flex; gap: 12px; }
-    .btn { height: 34px; min-width: 165px; padding: 0 12px; font-size: 11px; font-weight: 400; color: #fff; border: none; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; }
-    .btn--passive { background: var(--red); transition: background .2s; }
-    .btn--passive:hover { background: var(--grey-dark); }
-    .btn--active { background: var(--grey-dark); transition: background .2s; }
-    .btn--active:hover { background: var(--red); }
-    .btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+    /* OPEN ANSWERS */
+    .open-answers { padding: 32px var(--pad-l); background: #f9fafb; }
+    .open-answers h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .open-q-block { margin-bottom: 28px; }
+    .open-q-block h3 { font-size: 13px; font-weight: 700; color: var(--trap); margin-bottom: 12px; border-left: 3px solid var(--teal); padding-left: 10px; }
+    .open-answer-item { background: #fff; border: 1px solid var(--grey-light); padding: 12px 16px; margin-bottom: 6px; font-size: 12px; line-height: 1.6; }
+    .open-answer-self { border-left: 3px solid var(--self-color); }
+    .open-answer-fremd { border-left: 3px solid var(--fremd-color); }
+    .open-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+    .open-tag-self  { color: var(--self-color); }
+    .open-tag-fremd { color: var(--fremd-color); }
 
-    /* THANK YOU */
-    .thankyou { display: none; text-align: center; padding: 80px 40px; }
-    .thankyou.show { display: block; }
-    .thankyou__icon { font-size: 64px; margin-bottom: 24px; }
-    .thankyou__h1 { font-family: 'PT Serif', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px; }
-    .thankyou__p { font-size: 14px; color: var(--trap); line-height: 1.7; max-width: 480px; margin: 0 auto; }
+    /* ANONYMITY NOTICE */
+    .anon-notice { display: flex; gap: 10px; background: #fff8e1; border-left: 3px solid #b45309; padding: 12px 16px; font-size: 11px; margin: 16px var(--pad-l); line-height: 1.5; }
 
-    /* ERROR */
+    /* BTN */
+    .btn { height: 34px; min-width: 140px; padding: 0 16px; font-size: 11px; font-weight: 400; color: #fff; border: none; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; }
+    .btn--dark { background: var(--grey-dark); } .btn--dark:hover { background: var(--red); }
+    .btn--ghost { background: transparent; color: var(--grey-dark); border: 1.5px solid var(--grey-dark); } .btn--ghost:hover { background: var(--grey-dark); color: #fff; }
+
     .error-page { text-align: center; padding: 80px 40px; }
     .error-page h1 { font-family: 'PT Serif', serif; font-size: 24px; margin-bottom: 12px; }
     .error-page p { color: var(--trap); font-size: 13px; line-height: 1.6; }
 
-    /* PROGRESS INDICATOR */
-    .q-progress { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--grey-light); z-index: 10; padding: 8px var(--pad-l); display: flex; align-items: center; gap: 12px; }
-    .q-progress__bar { flex: 1; height: 3px; background: var(--grey-light); }
-    .q-progress__fill { height: 100%; background: var(--teal); transition: width .3s; }
-    .q-progress__label { font-size: 11px; color: var(--trap); white-space: nowrap; }
+    @media print {
+      @page { size: A4 portrait; margin: 15mm 18mm; }
+      .nav__actions, .btn { display: none !important; }
+      .nav__inner { height: auto; padding: 8mm 0; }
+      .section-block { page-break-inside: avoid; }
+    }
 
-    @media (max-width: 768px) {
-      :root { --pad-l: 0; --pad-r: 0; }
-      .nav__inner { height: auto; padding: 16px; }
-      .nav__logo svg { height: 50px; }
-      .intro { padding: 24px 16px 0; }
-      .scale-legend { margin-left: 16px; max-width: calc(100% - 32px); }
-      .q-section { flex-direction: column; padding: 0 16px 40px; }
-      .q-section__icon { width: 60px; }
-      .q-section__body { margin-left: 0; margin-top: 16px; width: 100%; }
-      .q-subsection__hdr { flex-wrap: wrap; }
-      .q-subsection__indent { display: none; }
-      .q-subsection__name { flex: 1 1 100%; }
-      .rating-hdr { flex: none; width: 100%; padding-left: 26px; }
-      .q-row { flex-wrap: wrap; padding-left: 0; }
-      .q-row__text { flex: 1 1 calc(100% - 26px); margin-bottom: 8px; }
-      .q-row__inputs { flex: none; width: 100%; padding-left: 26px; }
-      .sr-section { padding: 0 16px 40px; }
-      .actions { padding: 16px 16px 40px; }
-      .q-progress { padding: 8px 16px; }
+    @media (max-width: 900px) {
+      :root { --pad-l: 16px; --pad-r: 16px; }
+      .report-header { padding: 24px 16px; }
+      .legend-bar { padding: 10px 16px; flex-wrap: wrap; }
+      .sub-row__name { width: 140px; }
     }
   </style>
 </head>
@@ -131,223 +145,364 @@
 <nav class="nav">
   <div class="nav__inner">
     <div class="nav__logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 75" fill="none" height="75">
-        <text x="0" y="52" font-family="PT Serif, serif" font-size="48" fill="#000" font-weight="400">Universität</text>
-        <text x="0" y="68" font-family="Inter, sans-serif" font-size="11" fill="#000" font-weight="700" letter-spacing="2">BASEL</text>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none" height="60">
+        <text x="0" y="42" font-family="PT Serif, serif" font-size="38" fill="#000">Universität</text>
+        <text x="0" y="58" font-family="Inter, sans-serif" font-size="11" fill="#000" font-weight="700" letter-spacing="2">BASEL</text>
       </svg>
+    </div>
+    <div class="nav__info">
+      <div class="nav__title">360° Führungsbericht</div>
+      <div class="nav__sub" id="nav-sub">Leadership &amp; Development</div>
+    </div>
+    <div class="nav__actions">
+      <button class="btn btn--ghost" onclick="window.print()">Drucken / PDF</button>
+      <button class="btn btn--dark" onclick="window.location.href='index.html'">← Übersicht</button>
     </div>
   </div>
 </nav>
 
-<!-- ERROR STATE -->
-<div class="error-page" id="error-page" style="display:none">
-  <h1>Link ungültig oder abgelaufen</h1>
-  <p>Dieser Feedback-Link konnte nicht gefunden werden.<br>Bitte wenden Sie sich an die Person, die Ihnen diesen Link zugeschickt hat.</p>
+<div id="error-page" class="error-page" style="display:none">
+  <h1>Bericht nicht verfügbar</h1>
+  <p>Der Fall wurde nicht gefunden oder die Mindestanzahl von 3 Fremdbild-Rückmeldungen ist noch nicht erreicht.</p>
+  <br><a href="index.html" style="color:var(--red);">← Zurück zur Übersicht</a>
 </div>
 
-<!-- ALREADY SUBMITTED -->
-<div class="error-page" id="already-done" style="display:none">
-  <h1>Feedback bereits eingereicht</h1>
-  <p>Sie haben für diesen Feedbackprozess bereits eine Rückmeldung abgegeben.<br>Vielen Dank für Ihre Teilnahme.</p>
-</div>
+<div id="report-content" style="display:none">
 
-<!-- MAIN QUESTIONNAIRE -->
-<div id="main-content" style="display:none">
-  <div class="q-progress">
-    <div class="q-progress__bar"><div class="q-progress__fill" id="prog-fill" style="width:0%"></div></div>
-    <div class="q-progress__label" id="prog-label">0 von 0 beantwortet</div>
+  <div class="report-header" id="report-header"></div>
+
+  <div class="legend-bar">
+    <div class="legend-item"><span class="legend-dot legend-self"></span> Selbstbild</div>
+    <div class="legend-item"><span class="legend-dot legend-fremd"></span> Fremdbild Ø</div>
+    <div class="legend-item"><span class="legend-dot legend-dots"></span> Einzelrückmeldungen (anonymisiert)</div>
+    <span style="margin-left:auto;font-size:10px;color:var(--trap);">Skala: 1 = trifft gar nicht zu | 5 = trifft voll und ganz zu</span>
   </div>
 
   <div class="page">
-    <div class="intro">
-      <h1 class="intro__title">Fremdeinschätzung Leadership-Kompetenzen</h1>
-      <div class="intro__person" id="person-box"></div>
-      <div class="intro__body">
-        <p>Sie wurden eingeladen, eine Führungsperson im Rahmen des 360°-Führungsfeedbacks der Universität Basel zu bewerten. Ihre Angaben sind <strong>anonym</strong> – individuelle Rückmeldungen werden nicht an die bewertete Person weitergegeben. Auswertungen erfolgen nur bei mindestens 3 ausgefüllten Fremdbild-Fragebögen.</p>
-        <p>Bitte beurteilen Sie jede Aussage auf einer Skala von 1 (trifft gar nicht zu) bis 5 (trifft voll und ganz zu) bezogen auf Ihre Beobachtungen dieser Führungsperson.</p>
-      </div>
+
+    <!-- SPIDER CHART -->
+    <div class="spider-wrap" id="spider-wrap">
+      <h2>Gesamtprofil auf einen Blick</h2>
+      <p>Der Spinnendiagramm zeigt Ihre Mittelwerte pro Kompetenzbereich im Vergleich: blau = Selbstbild, rot = Fremdbild-Durchschnitt.</p>
+      <div class="spider-charts" id="spider-container"></div>
     </div>
 
-    <div class="scale-legend">
-      <div class="scale-legend__heading">Auswahlmöglichkeiten</div>
-      <div class="scale-legend__grid">
-        <div class="scale-legend__col"><span class="scale-legend__sym">1</span><span class="scale-legend__lbl">Trifft gar nicht zu</span></div>
-        <div class="scale-legend__col"><span class="scale-legend__sym">2</span><span class="scale-legend__lbl">Trifft eher nicht zu</span></div>
-        <div class="scale-legend__col"><span class="scale-legend__sym">3</span><span class="scale-legend__lbl">Trifft teils/teils zu</span></div>
-        <div class="scale-legend__col"><span class="scale-legend__sym">4</span><span class="scale-legend__lbl">Trifft ziemlich zu</span></div>
-        <div class="scale-legend__col"><span class="scale-legend__sym">5</span><span class="scale-legend__lbl">Trifft voll und ganz zu</span></div>
-      </div>
+    <!-- ANONYMITY NOTICE -->
+    <div class="anon-notice">
+      <span>🔒</span>
+      <span><strong>Datenschutz & Anonymität:</strong> Individuelle Fremdbild-Antworten werden nur aggregiert dargestellt. Einzelne Rückmeldungspunkte werden in zufälliger Reihenfolge ohne Zuordnung zu Personen gezeigt. Auswertungen erfolgen gemäss nDSG CH.</span>
     </div>
 
-    <div id="form-root"></div>
+    <!-- PER-SECTION CHARTS -->
+    <div id="sections-root"></div>
 
-    <!-- OPEN QUESTIONS -->
-    <div class="sr-section" style="margin-top:2rem;">
-      <h2 class="sr__h2">Offene Fragen</h2>
-      <hr class="sr__divider">
-      <div id="open-questions-root"></div>
+    <!-- GAP ANALYSIS -->
+    <div class="gap-summary" id="gap-summary">
+      <h3>Diskrepanzanalyse — Auffällige Unterschiede (Δ ≥ 0.8)</h3>
+      <table class="gap-table" id="gap-table">
+        <thead><tr>
+          <th>Kompetenzbereich</th>
+          <th>Selbst</th>
+          <th>Fremd Ø</th>
+          <th>Differenz</th>
+          <th>Interpretation</th>
+        </tr></thead>
+        <tbody id="gap-tbody"></tbody>
+      </table>
     </div>
 
-    <div class="actions">
-      <button class="btn btn--passive" id="btn-reset" onclick="resetForm()">Zurücksetzen</button>
-      <button class="btn btn--active" id="btn-submit" onclick="submitFeedback()" disabled>Feedback einreichen</button>
-    </div>
+    <!-- OPEN ANSWERS -->
+    <div class="open-answers" id="open-answers"></div>
+
+    <!-- REMARKS -->
+    <div id="remarks-root"></div>
+
   </div>
-</div>
-
-<!-- THANK YOU -->
-<div class="thankyou" id="thankyou">
-  <div class="thankyou__icon">✓</div>
-  <h1 class="thankyou__h1">Vielen Dank für Ihr Feedback!</h1>
-  <p class="thankyou__p">Ihre Rückmeldung wurde erfolgreich übermittelt und wird gemeinsam mit den Einschätzungen der anderen Feedbackgebenden ausgewertet. Dabei ist Ihre Anonymität zu jeder Zeit gewährleistet.</p>
 </div>
 
 <script src="cmt-data.js"></script>
 <script>
 const ICONS = [
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#d21039" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="M51.52 87.56c20.6 0 37.3-16.7 37.3-37.3s-16.7-37.3-37.3-37.3-37.3 16.7-37.3 37.3 16.7 37.3 37.3 37.3Z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="M45.73 45.26 36.51 62.5l17.27-9.17.03-.03 9.16-17.27z"/><path fill="#1d1d1b" d="m45.73 45.26 17.24-9.23-9.16 17.27z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m53.79 53.32-8.06-8.06M49.74 23.19v8.58m0 36.99v8.58M22.67 50.27h8.58m36.98 0h8.58"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#bebec8" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="m71.6 108.06-8.95-62.99h3.33V34.23h-2.11v-4.52h3.44L52.63 14.28 37.97 29.71h3.44v4.52h-2.1v10.84h3.32l-8.95 62.99z"/><path stroke="#1d1d1b" d="M33.76 91.89h33.3M36.34 74.93h27.72M38.77 57.96h23.46M39.15 34.23h22.61m-22.58-4.52h22.61M40.15 45.06h20.49"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#006f6f" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><circle cx="50" cy="50" r="28" stroke="#fff" stroke-width="2" fill="none"/><path d="M50 22v8M50 70v8M22 50h8M70 50h8" stroke="#fff" stroke-width="2"/><circle cx="50" cy="50" r="6" fill="#fff"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#eb829b" d="M50.06 100.05c27.614 0 50-22.386 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="m63.417 39.99-1.922-1.37a4.85 4.85 0 0 1-1.132-6.765l12.874-18.049 9.81 6.998-12.874 18.049a4.85 4.85 0 0 1-6.765 1.132zM19.78 21.257l9.81-6.998 12.874 18.05a4.85 4.85 0 0 1-1.132 6.764l-1.921 1.37a4.85 4.85 0 0 1-6.765-1.132L19.772 21.263z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m26.14 87.63 40.3-56.51M72.54 87.63 32.23 31.12"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#1EA5A5" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><rect x="20" y="30" width="60" height="40" rx="2" stroke="#fff" stroke-width="2" fill="none"/><path d="M30 42h40M30 50h40M30 58h24" stroke="#fff" stroke-width="2"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" fill="none"><g clip-path="url(#a)"><path fill="#d21039" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="M51.52 87.56c20.6 0 37.3-16.7 37.3-37.3s-16.7-37.3-37.3-37.3-37.3 16.7-37.3 37.3 16.7 37.3 37.3 37.3Z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="M45.73 45.26 36.51 62.5l17.27-9.17.03-.03 9.16-17.27z"/><path fill="#1d1d1b" d="m45.73 45.26 17.24-9.23-9.16 17.27z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" fill="none"><g clip-path="url(#a)"><path fill="#bebec8" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" d="m71.6 108.06-8.95-62.99h3.33V34.23h-2.11v-4.52h3.44L52.63 14.28 37.97 29.71h3.44v4.52h-2.1v10.84h3.32l-8.95 62.99z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" fill="none"><circle cx="50" cy="50" r="50" fill="#006f6f"/><circle cx="50" cy="50" r="28" stroke="#fff" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="6" fill="#fff"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" fill="none"><circle cx="50" cy="50" r="50" fill="#eb829b"/><path stroke="#fff" stroke-width="2" d="m26 88 40-56M74 88 34 32"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" fill="none"><circle cx="50" cy="50" r="50" fill="#1EA5A5"/><rect x="20" y="30" width="60" height="40" rx="2" stroke="#fff" stroke-width="2" fill="none"/><path d="M30 42h40M30 50h40M30 58h24" stroke="#fff" stroke-width="2"/></svg>`
 ];
 
-const params   = new URLSearchParams(window.location.search);
-const TOKEN    = params.get('token');
-const CASE_ID  = params.get('case');
-let caseData   = null;
-let respondent = null;
-let answers    = {};
-let openAnswers = {};
-let totalQ = 0;
+const REMARKS = [
+  { title: 'Führung als Vorbild', de: 'Seien Sie ein glaubwürdiges Vorbild, indem Sie die geltenden Werte und den Code of Conduct im Alltag sichtbar leben. Vereinbaren Sie klare Grundregeln für die Zusammenarbeit und halten Sie sich selbst konsequent daran. Leben Sie vor, wie man mit Problemen und Spannungen konstruktiv umgeht und stärken Sie die Zuversicht Ihres Teams.' },
+  { title: 'Orientierung schaffen', de: 'Informieren Sie Ihr Team regelmässig über wichtige Entwicklungen und besprechen Sie, was diese für Ihre Einheit bedeuten. Schaffen Sie Formate, in denen Ideen und Verbesserungsvorschläge Platz haben. Ermutigen Sie Ihr Team, Bestehendes zu hinterfragen und neue Lösungen vorzuschlagen.' },
+  { title: 'Wirksam steuern', de: 'Sorgen Sie für klare Aufgaben- und Rollenverteilungen. Delegieren Sie so, dass eindeutig ist, was erwartet wird. Machen Sie Qualitätsstandards sichtbar. Sprechen Sie Abweichungen bei Leistung und Verhalten frühzeitig an — viele Führungspersonen warten hier zu lange.' },
+  { title: 'Mitarbeitende entwickeln', de: 'Führen Sie regelmässige Gespräche zur Standortbestimmung und persönlichen Entwicklung. Übertragen Sie Verantwortung passend zu den vorhandenen Kompetenzen und berücksichtigen Sie Stärken und Interessen. Fördern Sie ein konstruktives Teamklima durch gut moderierte Meetings und Austauschformate.' },
+  { title: 'Arbeitsumfeld gestalten', de: 'Achten Sie auf einen guten Informationsfluss im Team. Planen Sie Ressourcen vorausschauend. Bei Veränderungen ist transparente Kommunikation besonders wichtig — erklären Sie Hintergründe und Ziele nachvollziehbar. Klären Sie Konflikte frühzeitig.' }
+];
 
 // ── INIT ──────────────────────────────────────────────────────
+const params  = new URLSearchParams(window.location.search);
+const CASE_ID = params.get('case');
+
 async function init() {
-  if (!TOKEN || !CASE_ID) { showError(); return; }
-  caseData   = await CMT.getCase(CASE_ID);
-  if (!caseData) { showError(); return; }
-  respondent = caseData.respondents.find(r => r.token === TOKEN);
-  if (!respondent) { showError(); return; }
-  if (respondent.submitted) { document.getElementById('already-done').style.display = 'block'; return; }
+  if (!CASE_ID) { showError(); return; }
+  const c = await CMT.getReportData(CASE_ID);
+  if (!c) { showError(); return; }
 
-  // Show person box
-  document.getElementById('person-box').innerHTML =
-    `<strong>${esc(caseData.name)}</strong>${caseData.role ? caseData.role : ''}${caseData.unit ? ' · ' + caseData.unit : ''}`;
+  const submittedRespondents = c.respondents.filter(r => r.submitted && r.answers);
+  const selfDone = c.selfAnswers && Object.keys(c.selfAnswers).length > 10;
 
-  document.getElementById('main-content').style.display = 'block';
-  renderForm();
-  renderOpenQuestions();
+  if (!selfDone || submittedRespondents.length < 3) { showError(); return; }
+
+  document.getElementById('report-content').style.display = 'block';
+  document.getElementById('nav-sub').textContent = c.name + (c.unit ? ' · ' + c.unit : '');
+
+  renderHeader(c, submittedRespondents);
+  renderSpider(c, submittedRespondents);
+  renderSections(c, submittedRespondents);
+  renderGapTable(c, submittedRespondents);
+  renderOpenAnswers(c, submittedRespondents);
+  renderRemarks();
 }
 
 function showError() {
   document.getElementById('error-page').style.display = 'block';
 }
 
-// ── RENDER FORM ───────────────────────────────────────────────
-function renderForm() {
-  const COLORS = ['--col-1','--col-2','--col-3','--col-4','--col-5'];
-  let qNum = 0;
-  totalQ = 0;
-  CMT.sections.forEach(s => s.subsections.forEach(ss => totalQ += ss.questions.length));
+// ── HEADER ────────────────────────────────────────────────────
+function renderHeader(c, respondents) {
+  const date = new Date().toLocaleDateString('de-CH', { day:'2-digit', month:'long', year:'numeric' });
+  document.getElementById('report-header').innerHTML = `
+    <div class="report-header__label">360° Führungsfeedback — Universität Basel</div>
+    <div class="report-header__name">${esc(c.name)}</div>
+    <div class="report-header__meta">${esc(c.role||'')}${c.role&&c.unit?' · ':''}${esc(c.unit||'')} · Bericht generiert am ${date}</div>
+    <div class="report-header__stats">
+      <div class="report-stat"><div class="report-stat__val">${respondents.length}</div><div class="report-stat__lbl">Feedbackgeber/innen</div></div>
+      <div class="report-stat"><div class="report-stat__val">✓</div><div class="report-stat__lbl">Selbstbild ausgefüllt</div></div>
+      <div class="report-stat"><div class="report-stat__val">${CMT.sections.length}</div><div class="report-stat__lbl">Kompetenzbereiche</div></div>
+    </div>`;
+}
 
-  document.getElementById('form-root').innerHTML = CMT.sections.map((section, si) => {
-    const color = `var(${COLORS[si]})`;
-    let localQ = 0;
-    const subsHtml = section.subsections.map(ss => {
-      const isTrap = ss.trap;
-      const hdr = `
-        <div class="q-subsection__hdr">
-          <div class="q-subsection__indent"></div>
-          <div class="q-subsection__name${isTrap?' trap':''}">${esc(ss.de)}</div>
-          <div class="rating-hdr"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+// ── SPIDER CHART ──────────────────────────────────────────────
+function renderSpider(c, respondents) {
+  const CX = 160, CY = 160, R = 110, N = CMT.sections.length;
+
+  const selfAvgs  = CMT.sections.map(s => CMT.calcSectionAvg(c.selfAnswers, s) || 3);
+  const fremdAvgs = CMT.sections.map(s => {
+    const vals = respondents.map(r => CMT.calcSectionAvg(r.answers, s)).filter(v=>v!==null);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 3;
+  });
+
+  function toXY(i, val) {
+    const angle = (2 * Math.PI * i / N) - Math.PI / 2;
+    const r = (val - 1) / 4 * R;
+    return { x: CX + r * Math.cos(angle), y: CY + r * Math.sin(angle) };
+  }
+
+  // Grid rings
+  const gridRings = [1,2,3,4,5].map(v => {
+    const pts = CMT.sections.map((_,i) => toXY(i,v));
+    return `<polygon points="${pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="${v>=4?'var(--teal)':'#e0e0e0'}" stroke-width="1"/>`;
+  }).join('');
+
+  // Axis lines + labels
+  const axes = CMT.sections.map((s,i) => {
+    const outer = toXY(i, 5.3);
+    const inner = toXY(i, 0.5);
+    return `<line x1="${CX}" y1="${CY}" x2="${inner.x.toFixed(1)}" y2="${inner.y.toFixed(1)}" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="${outer.x.toFixed(1)}" y="${outer.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="9" font-family="Inter,sans-serif" fill="#444">${s.de.split(' ').slice(0,2).join(' ')}</text>`;
+  }).join('');
+
+  // Polygons
+  function polygon(avgs, color, opacity) {
+    const pts = avgs.map((v,i) => toXY(i,v));
+    return `<polygon points="${pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="${color}" fill-opacity="${opacity}" stroke="${color}" stroke-width="2"/>`;
+  }
+
+  // Scale labels
+  const scaleLabels = [1,2,3,4,5].map(v => {
+    const p = toXY(0, v);
+    return `<text x="${(p.x+4).toFixed(1)}" y="${p.y.toFixed(1)}" font-size="8" fill="#999" font-family="Inter,sans-serif">${v}</text>`;
+  }).join('');
+
+  const W = CX*2, H = CY*2 + 20;
+  document.getElementById('spider-container').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="overflow:visible">
+      ${gridRings}${axes}${scaleLabels}
+      ${polygon(fremdAvgs, 'var(--fremd-color)', 0.1)}
+      ${polygon(selfAvgs, 'var(--self-color)', 0.15)}
+      ${polygon(fremdAvgs, 'var(--fremd-color)', 0)}
+      ${polygon(selfAvgs, 'var(--self-color)', 0)}
+      ${selfAvgs.map((v,i) => { const p=toXY(i,v); return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--self-color)"/>`; }).join('')}
+      ${fremdAvgs.map((v,i) => { const p=toXY(i,v); return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--fremd-color)"/>`; }).join('')}
+    </svg>`;
+}
+
+// ── PER-SECTION CHARTS ────────────────────────────────────────
+function renderSections(c, respondents) {
+  const CHART_W = 280;
+  function toX(v) { return ((v-1)/4) * CHART_W; }
+
+  document.getElementById('sections-root').innerHTML = CMT.sections.map((section, si) => {
+    const selfSectionAvg  = CMT.calcSectionAvg(c.selfAnswers, section);
+    const fremdSectionAvgs = respondents.map(r => CMT.calcSectionAvg(r.answers, section)).filter(v=>v!==null);
+    const fremdSectionAvg = fremdSectionAvgs.length ? fremdSectionAvgs.reduce((a,b)=>a+b,0)/fremdSectionAvgs.length : null;
+
+    const subsRows = section.subsections.map(ss => {
+      const selfAvg  = CMT.calcSubsectionAvg(c.selfAnswers, ss);
+      const fremdVals = respondents.map(r => CMT.calcSubsectionAvg(r.answers, ss)).filter(v=>v!==null);
+      const fremdAvg  = fremdVals.length ? fremdVals.reduce((a,b)=>a+b,0)/fremdVals.length : null;
+
+      if (selfAvg === null && fremdAvg === null) return '';
+
+      const selfX  = selfAvg  !== null ? toX(selfAvg)  : null;
+      const fremdX = fremdAvg !== null ? toX(fremdAvg) : null;
+      const gap    = (selfAvg !== null && fremdAvg !== null) ? selfAvg - fremdAvg : null;
+      const gapAbs = gap !== null ? Math.abs(gap) : 0;
+      let gapClass = 'gap--ok', gapText = gap !== null ? (gap > 0 ? '+' : '') + gap.toFixed(1) : '—';
+      if (gapAbs >= 0.8) gapClass = gap > 0 ? 'gap--blind' : 'gap--hidden';
+
+      // Shuffle individual fremd dots (anonymize order)
+      const shuffled = [...fremdVals].sort(() => Math.random() - .5);
+
+      const dots = shuffled.map(v =>
+        `<div class="sub-row__dot sub-row__dot--ext" style="left:${toX(v).toFixed(1)}px"></div>`
+      ).join('');
+      const selfDot  = selfX  !== null ? `<div class="sub-row__dot sub-row__dot--self"  style="left:${selfX.toFixed(1)}px"></div>` : '';
+      const fremdDot = fremdX !== null ? `<div class="sub-row__dot sub-row__dot--fremd" style="left:${fremdX.toFixed(1)}px"></div>` : '';
+
+      const lineLeft  = Math.min(selfX||0, fremdX||0);
+      const lineWidth = Math.abs((selfX||0) - (fremdX||0));
+      const connLine  = (selfX!==null && fremdX!==null)
+        ? `<div class="sub-row__line" style="left:${lineLeft.toFixed(1)}px;width:${lineWidth.toFixed(1)}px"></div>` : '';
+
+      const gridLines = [1,2,3,4,5].map(v =>
+        `<div class="sub-row__grid-line${v>=4?' teal':''}" style="left:${toX(v).toFixed(1)}px"></div>`
+      ).join('');
+
+      return `
+        <div class="sub-row">
+          <div class="sub-row__name${ss.trap?' trap':''}">${esc(ss.de)}</div>
+          <div class="sub-row__chart" style="width:${CHART_W}px">
+            <div class="sub-row__grid">${gridLines}</div>
+            <div class="sub-row__track"></div>
+            ${dots}${connLine}${selfDot}${fremdDot}
+          </div>
+          <div class="sub-row__vals">
+            <span class="val-self">${selfAvg!==null ? selfAvg.toFixed(1) : '—'}</span>
+            <span style="color:#ccc">/</span>
+            <span class="val-fremd">${fremdAvg!==null ? fremdAvg.toFixed(1) : '—'}</span>
+          </div>
+          <div class="sub-row__gap ${gapClass}">${gapText}</div>
         </div>`;
-      const rows = ss.questions.map(q => {
-        localQ++; qNum++;
-        const text = CMT.toFremd(q.de);
-        return `
-          <div class="q-row">
-            <div class="q-row__num">${localQ}</div>
-            <div class="q-row__text${isTrap?' trap':''}">${esc(text)}</div>
-            <div class="q-row__inputs">
-              ${[1,2,3,4,5].map(v =>
-                `<input type="radio" name="${q.id}" value="${v}" onchange="onAnswer('${q.id}',${v})">`
-              ).join('')}
-            </div>
-          </div>`;
-      }).join('');
-      return `<div class="q-subsection${isTrap?' trap':''}">${hdr}<div class="q-list">${rows}</div></div>`;
     }).join('');
 
     return `
-      <section class="q-section" style="--border-color:${color}">
-        <div class="q-section__icon">${ICONS[si]}</div>
-        <div class="q-section__body">
-          <div class="q-section__head" style="--border-color:${color}">
-            <div class="q-section__num">${si+1}</div>
-            <h2 class="q-section__title">${esc(section.de)}</h2>
+      <div class="section-block">
+        <div class="section-head">
+          <div class="section-head__icon">${ICONS[si]}</div>
+          <div class="section-head__body">
+            <div class="section-head__num">${si+1}</div>
+            <div class="section-head__title">${esc(section.de)}</div>
+            <div class="section-head__avgs">
+              <span class="avg-chip avg-self">Selbst: ${selfSectionAvg!==null ? selfSectionAvg.toFixed(2) : '—'}</span>
+              <span class="avg-chip avg-fremd">Fremd Ø: ${fremdSectionAvg!==null ? fremdSectionAvg.toFixed(2) : '—'}</span>
+            </div>
           </div>
-          ${subsHtml}
         </div>
-      </section>`;
+        <div class="subsection-rows">${subsRows}</div>
+      </div>`;
   }).join('');
 }
 
-function renderOpenQuestions() {
-  document.getElementById('open-questions-root').innerHTML =
-    CMT.fremdReflection.map(q => `
-      <div class="sr__question">
-        <label class="sr__label" for="${q.id}">${esc(q.de)}</label>
-        <textarea class="sr__textarea" id="${q.id}" name="${q.id}" rows="4"
-          oninput="openAnswers['${q.id}']=this.value" placeholder="Ihre Antwort (freiwillig) …"></textarea>
-      </div>`).join('');
-}
+// ── GAP TABLE ─────────────────────────────────────────────────
+function renderGapTable(c, respondents) {
+  const rows = [];
+  CMT.sections.forEach(section => {
+    section.subsections.filter(ss => !ss.trap).forEach(ss => {
+      const selfAvg  = CMT.calcSubsectionAvg(c.selfAnswers, ss);
+      const fremdVals = respondents.map(r => CMT.calcSubsectionAvg(r.answers, ss)).filter(v=>v!==null);
+      const fremdAvg  = fremdVals.length ? fremdVals.reduce((a,b)=>a+b,0)/fremdVals.length : null;
+      if (selfAvg === null || fremdAvg === null) return;
+      const gap = selfAvg - fremdAvg;
+      if (Math.abs(gap) >= 0.8) rows.push({ section: section.de, sub: ss.de, self: selfAvg, fremd: fremdAvg, gap });
+    });
+  });
 
-// ── ANSWERS ───────────────────────────────────────────────────
-function onAnswer(qId, val) {
-  answers[qId] = val;
-  updateProgress();
-  checkReady();
-}
+  rows.sort((a,b) => Math.abs(b.gap) - Math.abs(a.gap));
 
-function updateProgress() {
-  const done = Object.keys(answers).length;
-  const pct  = totalQ ? Math.round(done / totalQ * 100) : 0;
-  document.getElementById('prog-fill').style.width  = pct + '%';
-  document.getElementById('prog-label').textContent = `${done} von ${totalQ} beantwortet`;
-}
-
-function checkReady() {
-  const done = Object.keys(answers).length;
-  document.getElementById('btn-submit').disabled = done < totalQ;
-}
-
-function resetForm() {
-  if (!confirm('Alle Eingaben zurücksetzen?')) return;
-  answers = {};
-  openAnswers = {};
-  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-  document.querySelectorAll('.sr__textarea').forEach(t => t.value = '');
-  updateProgress();
-  checkReady();
-}
-
-// ── SUBMIT ────────────────────────────────────────────────────
-async function submitFeedback() {
-  const totalAnswered = Object.keys(answers).length;
-  if (totalAnswered < totalQ) {
-    alert(`Bitte beantworten Sie alle ${totalQ} Fragen bevor Sie einreichen.`);
-    return;
-  }
-  if (!confirm('Möchten Sie Ihr Feedback jetzt einreichen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
-
-  const result = await CMT.submitFremdbild(TOKEN, CASE_ID, { ...answers }, { ...openAnswers });
-  if (!result?.ok && result !== undefined) {
-    alert('Fehler beim Einreichen. Bitte versuchen Sie es erneut.');
+  if (!rows.length) {
+    document.getElementById('gap-summary').innerHTML = '<h3>Diskrepanzanalyse</h3><p style="font-size:12px;color:var(--trap);">Keine auffälligen Unterschiede (Δ ≥ 0.8) festgestellt. Selbst- und Fremdbild stimmen gut überein.</p>';
     return;
   }
 
-  document.getElementById('main-content').style.display = 'none';
-  document.getElementById('thankyou').classList.add('show');
+  document.getElementById('gap-tbody').innerHTML = rows.map(r => {
+    const isBlind  = r.gap > 0;
+    const label    = isBlind
+      ? `<span style="color:#c00;font-weight:700;">Blinder Fleck</span> — Selbsteinschätzung deutlich höher als Fremdwahrnehmung`
+      : `<span style="color:#1a7a3a;font-weight:700;">Verstärkte Ressource</span> — Fremdwahrnehmung deutlich höher als Selbsteinschätzung`;
+    return `<tr>
+      <td><strong>${esc(r.section)}</strong><br><span style="color:var(--trap)">${esc(r.sub)}</span></td>
+      <td class="val-self" style="font-weight:700">${r.self.toFixed(2)}</td>
+      <td class="val-fremd" style="font-weight:700">${r.fremd.toFixed(2)}</td>
+      <td style="font-weight:700;color:${isBlind?'#c00':'#1a7a3a'}">${r.gap>0?'+':''}${r.gap.toFixed(2)}</td>
+      <td>${label}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── OPEN ANSWERS ──────────────────────────────────────────────
+function renderOpenAnswers(c, respondents) {
+  const selfQs  = CMT.selfReflection;
+  const fremdQs = CMT.fremdReflection;
+
+  let html = '<h2>Qualitative Rückmeldungen</h2>';
+
+  // Self
+  if (c.selfReflection && Object.keys(c.selfReflection).length) {
+    html += '<div style="margin-bottom:28px"><h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--self-color)">👤 Selbstreflexion der Führungsperson</h3>';
+    selfQs.forEach(q => {
+      const ans = c.selfReflection[q.id];
+      if (ans) html += `<div class="open-answer-item open-answer-self"><div class="open-tag open-tag-self">Selbst</div><strong>${esc(q.de)}</strong><br><span style="color:#444">${esc(ans)}</span></div>`;
+    });
+    html += '</div>';
+  }
+
+  // Fremd (aggregated — show all non-empty answers without attribution)
+  const fremdAnswersByQ = {};
+  fremdQs.forEach(q => { fremdAnswersByQ[q.id] = []; });
+  respondents.forEach(r => {
+    if (!r.openAnswers) return;
+    fremdQs.forEach(q => {
+      const ans = r.openAnswers[q.id];
+      if (ans && ans.trim()) fremdAnswersByQ[q.id].push(ans.trim());
+    });
+  });
+
+  const hasFremd = fremdQs.some(q => fremdAnswersByQ[q.id].length > 0);
+  if (hasFremd) {
+    html += '<div style="margin-bottom:28px"><h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--fremd-color)">👥 Rückmeldungen der Feedbackgebenden (anonym)</h3>';
+    fremdQs.forEach(q => {
+      const answers = fremdAnswersByQ[q.id];
+      if (!answers.length) return;
+      html += `<div class="open-q-block"><h3>${esc(q.de)}</h3>`;
+      // Shuffle for anonymity
+      [...answers].sort(() => Math.random()-.5).forEach(a => {
+        html += `<div class="open-answer-item open-answer-fremd"><div class="open-tag open-tag-fremd">Fremdbild</div>${esc(a)}</div>`;
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('open-answers').innerHTML = html;
+}
+
+// ── REMARKS ───────────────────────────────────────────────────
+function renderRemarks() {
+  document.getElementById('remarks-root').innerHTML = REMARKS.map(r => `
+    <div class="remarks-block">
+      <h3>Entwicklungsimpulse: ${esc(r.title)}</h3>
+      <p>${esc(r.de)}</p>
+    </div>`).join('');
 }
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
