@@ -9,159 +9,184 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=PT+Serif&display=swap" rel="stylesheet">
   <style>
     :root {
-      --red:   #d20537;
-      --teal:  #a5d7d2;
-      --dark:  #222;
-      --grey:  #5D666D;
-      --light: #f4f6f8;
-      --rule:  #d0d0d0;
-      --max-w: 1280px;
+      --red:#d20537; --teal:#a5d7d2; --dark:#222; --grey:#5D666D;
+      --light:#f4f6fb; --rule:#d0d0d0; --max-w:1280px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; font-size: 13px; background: #fff; color: #000; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;font-size:13px;background:#f0f2f5;color:#000;}
 
-    /* NAV */
-    .nav { background: var(--teal); }
-    .nav__inner { max-width: var(--max-w); margin: 0 auto; height: 120px; display: flex; align-items: center; padding: 0 48px; gap: 24px; }
-    .nav__logo svg { height: 60px; width: auto; display: block; }
-    .nav__title { font-family: 'PT Serif', serif; font-size: 20px; font-weight: 400; margin-left: 32px; }
-    .nav__subtitle { font-size: 12px; color: var(--grey); margin-top: 4px; }
+    .nav{background:var(--teal);}
+    .nav__inner{max-width:var(--max-w);margin:0 auto;height:100px;display:flex;align-items:center;padding:0 40px;gap:20px;}
+    .nav__wordmark{font-family:'PT Serif',serif;font-size:22px;line-height:1;}
+    .nav__wordmark span{display:block;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-top:3px;}
+    .nav__title{margin-left:28px;border-left:1.5px solid rgba(0,0,0,.15);padding-left:28px;}
+    .nav__title h1{font-family:'PT Serif',serif;font-size:18px;font-weight:400;}
+    .nav__title p{font-size:11px;color:var(--grey);margin-top:2px;}
+    .nav__right{margin-left:auto;display:flex;align-items:center;gap:10px;}
 
-    /* PAGE */
-    .page { max-width: var(--max-w); margin: 0 auto; padding: 48px 48px 80px; }
+    .toolbar{background:#fff;border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:50;}
+    .toolbar__inner{max-width:var(--max-w);margin:0 auto;padding:10px 40px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .filter-input{height:32px;border:1.5px solid var(--rule);padding:0 10px;font-size:12px;font-family:'Inter',sans-serif;outline:none;background:#fff;}
+    .filter-input:focus{border-color:var(--dark);}
+    .filter-input--search{width:200px;}
+    .filter-label{font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+    .toolbar__count{margin-left:auto;font-size:11px;color:var(--grey);}
+    .btn-clear{font-size:11px;color:var(--red);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0;}
 
-    /* HERO STRIP */
-    .hero-strip { background: var(--dark); color: #fff; padding: 32px 48px; margin-bottom: 40px; }
-    .hero-strip h1 { font-family: 'PT Serif', serif; font-size: 26px; font-weight: 400; margin-bottom: 8px; }
-    .hero-strip p { font-size: 13px; color: #bbb; line-height: 1.6; max-width: 640px; }
+    .page{max-width:var(--max-w);margin:0 auto;padding:28px 40px 80px;}
 
-    /* SECTION HEADING */
-    .section-head { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--dark); padding-bottom: 10px; margin-bottom: 24px; }
-    .section-head h2 { font-size: 16px; font-weight: 700; }
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+    .stat-card{background:#fff;border:1px solid var(--rule);padding:16px 20px;}
+    .stat-card__val{font-family:'PT Serif',serif;font-size:28px;font-weight:400;line-height:1;}
+    .stat-card__lbl{font-size:11px;color:var(--grey);margin-top:4px;text-transform:uppercase;letter-spacing:.04em;}
 
-    /* BTN */
-    .btn { height: 34px; min-width: 160px; padding: 0 16px; font-size: 11px; font-weight: 400; color: #fff; border: none; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; transition: background .2s; letter-spacing: .04em; }
-    .btn--red   { background: var(--red); }
-    .btn--red:hover   { background: var(--dark); }
-    .btn--dark  { background: var(--dark); }
-    .btn--dark:hover  { background: var(--red); }
-    .btn--ghost { background: transparent; color: var(--dark); border: 1.5px solid var(--dark); }
-    .btn--ghost:hover { background: var(--dark); color: #fff; }
-    .btn--sm { height: 28px; min-width: 0; font-size: 10px; padding: 0 12px; }
+    .new-case-panel{background:#fff;border:1px solid var(--rule);padding:28px;margin-bottom:20px;display:none;}
+    .new-case-panel.open{display:block;}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .panel-head h2{font-size:15px;font-weight:700;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .form-row{display:flex;flex-direction:column;gap:5px;}
+    .form-row label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--grey);}
+    .form-row input,.form-row select,.form-row textarea{height:34px;border:1.5px solid #c8d4ea;padding:0 10px;font-family:'Inter',sans-serif;font-size:12px;outline:none;background:#fff;}
+    .form-row input:focus,.form-row select:focus{border-color:var(--dark);}
+    .form-row textarea{height:72px;padding:8px 10px;resize:vertical;}
+    .form-row--full{grid-column:1/-1;}
 
-    /* CASE GRID */
-    .case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 48px; }
+    .case-table-wrap{background:#fff;border:1px solid var(--rule);}
+    .case-table-head{display:grid;grid-template-columns:2fr 1.2fr 1fr 80px 100px 110px 120px;border-bottom:2px solid var(--dark);}
+    .case-table-head th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--grey);padding:10px 14px;text-align:left;background:#f8f9fb;}
+    .case-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 80px 100px 110px 120px;border-bottom:1px solid var(--rule);align-items:center;transition:background .15s;}
+    .case-row:last-child{border-bottom:none;}
+    .case-row:hover{background:#f8f9fb;}
+    .case-row__cell{padding:12px 14px;font-size:12px;}
+    .case-name{font-weight:700;font-size:13px;margin-bottom:2px;}
+    .case-meta{font-size:11px;color:var(--grey);}
+    .year-badge{display:inline-block;background:#e8edf5;color:#1a56db;font-size:10px;font-weight:700;padding:2px 7px;}
+    .status-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;}
+    .s-draft{background:#f0f0f0;color:var(--grey);}
+    .s-active{background:#e6f4ea;color:#1a7a3a;}
+    .s-ready{background:#fef3e2;color:#b45309;}
+    .s-closed{background:#e8edf5;color:#1a56db;}
+    .progress-mini{display:flex;flex-direction:column;gap:3px;}
+    .progress-mini__bar{height:3px;background:var(--rule);}
+    .progress-mini__fill{height:100%;background:var(--teal);}
+    .progress-mini__lbl{font-size:10px;color:var(--grey);}
+    .self-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+    .dot-green{background:#1a7a3a;}
+    .dot-grey{background:var(--rule);border:1.5px solid #aaa;}
 
-    .case-card { border: 1.5px solid var(--rule); padding: 24px; background: #fff; position: relative; }
-    .case-card:hover { border-color: var(--dark); }
-    .case-card__name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .case-card__meta { font-size: 11px; color: var(--grey); margin-bottom: 16px; }
-    .case-card__status { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; margin-bottom: 16px; }
-    .status--draft    { background: #f0f0f0; color: var(--grey); }
-    .status--active   { background: #e6f4ea; color: #1a7a3a; }
-    .status--complete { background: #e8f0fe; color: #1a56db; }
-    .status--ready    { background: #fef3e2; color: #b45309; }
+    .action-menu{position:relative;display:inline-block;}
+    .action-btn{height:28px;padding:0 12px;background:var(--dark);color:#fff;border:none;cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:5px;}
+    .action-btn:hover{background:var(--red);}
+    .action-dropdown{position:absolute;right:0;top:100%;background:#fff;border:1.5px solid var(--dark);min-width:200px;z-index:100;display:none;box-shadow:0 4px 16px rgba(0,0,0,.15);}
+    .action-dropdown.open{display:block;}
+    .action-dropdown a,.action-dropdown button{display:block;width:100%;text-align:left;padding:9px 14px;font-size:12px;font-family:'Inter',sans-serif;color:var(--dark);text-decoration:none;background:none;border:none;cursor:pointer;border-bottom:1px solid var(--rule);}
+    .action-dropdown a:last-child,.action-dropdown button:last-child{border-bottom:none;}
+    .action-dropdown a:hover,.action-dropdown button:hover{background:var(--light);}
+    .action-dropdown .danger{color:var(--red);}
+    .action-dropdown button:disabled{opacity:.4;cursor:not-allowed;}
+    .action-sep{height:1px;background:var(--rule);}
 
-    .case-card__progress { margin-bottom: 16px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--grey); margin-bottom: 4px; }
-    .progress-bar { height: 4px; background: var(--rule); }
-    .progress-bar__fill { height: 100%; background: var(--teal); transition: width .3s; }
+    .resp-row{display:none;}
+    .resp-row.open{display:table-row;}
+    .resp-inner{padding:16px 20px;border-top:1px solid var(--rule);background:var(--light);}
+    .resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+    .resp-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border:1px solid var(--rule);font-size:11px;}
+    .resp-item__email{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .resp-item__status{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 6px;white-space:nowrap;}
+    .r-pending{background:#f0f0f0;color:var(--grey);}
+    .r-done{background:#e6f4ea;color:#1a7a3a;}
+    .copy-link{font-size:10px;color:var(--red);cursor:pointer;white-space:nowrap;border:none;background:none;font-family:'Inter',sans-serif;text-decoration:underline;padding:0;}
+    .copy-link:hover{color:var(--dark);}
+    .add-resp{display:flex;gap:8px;margin-top:10px;}
+    .add-resp input{flex:1;height:30px;border:1.5px solid var(--rule);padding:0 10px;font-size:12px;font-family:'Inter',sans-serif;outline:none;}
+    .add-resp input:focus{border-color:var(--dark);}
+    .anon-bar{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;background:#fff8e1;border-left:3px solid #b45309;font-size:11px;line-height:1.5;margin-top:10px;}
+    .selbst-link-bar{margin-top:10px;font-size:11px;color:var(--grey);padding:8px 12px;background:#eef1f8;border-left:3px solid var(--teal);}
 
-    .case-card__selbst { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 16px; padding: 8px 12px; background: var(--light); }
-    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot--green { background: #1a7a3a; }
-    .dot--grey  { background: var(--rule); border: 1.5px solid var(--grey); }
-    .dot--amber { background: #b45309; }
+    .btn{height:32px;padding:0 16px;font-size:11px;font-weight:400;color:#fff;border:none;cursor:pointer;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;letter-spacing:.04em;font-family:'Inter',sans-serif;}
+    .btn--red{background:var(--red);} .btn--red:hover{background:var(--dark);}
+    .btn--dark{background:var(--dark);} .btn--dark:hover{background:var(--red);}
+    .btn--ghost{background:transparent;color:var(--dark);border:1.5px solid var(--dark);} .btn--ghost:hover{background:var(--dark);color:#fff;}
+    .btn--sm{height:26px;font-size:10px;padding:0 10px;}
 
-    .case-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .empty{text-align:center;padding:60px 20px;color:var(--grey);}
+    .empty p{font-size:14px;margin-bottom:16px;}
 
-    /* NEW CASE FORM */
-    .new-case-panel { border: 2px dashed var(--rule); padding: 32px; margin-bottom: 40px; display: none; }
-    .new-case-panel.open { display: block; }
-    .form-row { margin-bottom: 16px; }
-    .form-row label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
-    .form-row input, .form-row select, .form-row textarea {
-      width: 100%; height: 36px; border: 1.5px solid #c8d4ea; padding: 0 10px;
-      font-family: 'Inter', sans-serif; font-size: 13px; outline: none;
+    .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:10px 18px;font-size:12px;display:none;z-index:999;max-width:320px;}
+    .toast.show{display:block;animation:fadeout 2.8s forwards;}
+    @keyframes fadeout{0%,65%{opacity:1}100%{opacity:0}}
+
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:300;}
+    .modal-bg.open{display:flex;}
+    .modal{background:#fff;padding:32px;width:520px;max-width:95vw;}
+    .modal h2{font-size:16px;font-weight:700;margin-bottom:8px;}
+    .modal p{font-size:12px;color:var(--grey);margin-bottom:20px;line-height:1.5;}
+    .modal__actions{display:flex;gap:10px;justify-content:flex-end;}
+
+    .export-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+    .export-opt{border:1.5px solid var(--rule);padding:14px;cursor:pointer;transition:border-color .15s;}
+    .export-opt:hover,.export-opt.selected{border-color:var(--dark);background:var(--light);}
+    .export-opt__icon{font-size:20px;margin-bottom:6px;}
+    .export-opt__title{font-size:12px;font-weight:700;margin-bottom:3px;}
+    .export-opt__desc{font-size:11px;color:var(--grey);line-height:1.4;}
+
+    @media(max-width:900px){
+      .case-table-head,.case-row{grid-template-columns:1fr 80px 110px 120px;}
+      .hide-mobile{display:none!important;}
+      .stats-row{grid-template-columns:1fr 1fr;}
+      .form-grid{grid-template-columns:1fr;}
+      .resp-grid{grid-template-columns:1fr;}
     }
-    .form-row input:focus, .form-row select:focus { border-color: var(--dark); }
-    .form-row textarea { height: 80px; padding: 8px 10px; resize: vertical; }
-    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    /* RESPONDENT MANAGER */
-    .respondent-panel { background: var(--light); padding: 24px; margin-top: 16px; }
-    .respondent-panel h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
-    .respondent-add { display: flex; gap: 8px; margin-bottom: 16px; }
-    .respondent-add input { flex: 1; height: 32px; border: 1.5px solid var(--rule); padding: 0 10px; font-size: 12px; font-family: 'Inter', sans-serif; }
-    .respondent-list { display: flex; flex-direction: column; gap: 6px; }
-    .respondent-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #fff; border: 1px solid var(--rule); font-size: 12px; }
-    .respondent-item__email { flex: 1; }
-    .respondent-item__status { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; }
-    .r-pending  { background: #f0f0f0; color: var(--grey); }
-    .r-done     { background: #e6f4ea; color: #1a7a3a; }
-    .link-input { font-size: 10px; color: var(--grey); font-family: monospace; background: var(--light); padding: 2px 6px; border: 1px solid var(--rule); cursor: pointer; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .link-input:hover { background: #e0e8f0; }
-
-    .anonymity-warn { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: #fff8e1; border-left: 3px solid #b45309; font-size: 11px; line-height: 1.5; margin-top: 12px; }
-    .anonymity-warn strong { color: #b45309; }
-
-    /* EMPTY STATE */
-    .empty-state { text-align: center; padding: 64px 32px; color: var(--grey); }
-    .empty-state svg { display: block; margin: 0 auto 16px; opacity: .3; }
-    .empty-state p { font-size: 14px; margin-bottom: 20px; }
-
-    /* TOAST */
-    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: #fff; padding: 12px 20px; font-size: 12px; display: none; z-index: 100; }
-    .toast.show { display: block; animation: fadeout 2.5s forwards; }
-    @keyframes fadeout { 0%,70%{opacity:1} 100%{opacity:0} }
-
-    /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 200; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: #fff; padding: 32px; width: 560px; max-width: 95vw; }
-    .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-    .modal p { font-size: 13px; color: var(--grey); margin-bottom: 24px; line-height: 1.5; }
-    .modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
   </style>
 </head>
 <body>
 
 <nav class="nav">
   <div class="nav__inner">
-    <div class="nav__logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 75" fill="none">
-        <path fill="#000" d="M0 0h236v75H0z" opacity="0"/>
-        <text x="0" y="52" font-family="PT Serif, serif" font-size="48" fill="#000">Unibas</text>
-      </svg>
-      <!-- Unibas wordmark placeholder — replace with official SVG -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none" height="60">
-        <rect width="200" height="60" fill="transparent"/>
-        <text x="0" y="42" font-family="PT Serif, serif" font-size="38" fill="#000" font-weight="400">Universität</text>
-        <text x="0" y="58" font-family="Inter, sans-serif" font-size="11" fill="#000" font-weight="700" letter-spacing="2">BASEL</text>
-      </svg>
+    <div class="nav__wordmark">Universität<span>Basel</span></div>
+    <div class="nav__title">
+      <h1>360° Führungsfeedback</h1>
+      <p>Leadership &amp; Development · Personalentwicklung</p>
     </div>
-    <div>
-      <div class="nav__title">360° Führungsfeedback</div>
-      <div class="nav__subtitle">Leadership &amp; Development | Personalentwicklung</div>
+    <div class="nav__right">
+      <a href="seed.html" class="btn btn--ghost btn--sm" style="text-decoration:none">Testdaten laden</a>
+      <button class="btn btn--red" onclick="openNewCase()">+ Neuer Fall</button>
     </div>
   </div>
 </nav>
 
-<div class="hero-strip">
-  <h1>Feedback-Übersicht</h1>
-  <p>Erstellen und verwalten Sie 360°-Feedbackprozesse. Laden Sie Feedbackgeber/innen ein, verfolgen Sie den Rücklauf und generieren Sie den Vergleichsbericht sobald mindestens 3 Rückmeldungen vorliegen.</p>
+<div class="toolbar">
+  <div class="toolbar__inner">
+    <span class="filter-label">Filter:</span>
+    <input class="filter-input filter-input--search" type="search" id="f-search" placeholder="Name suchen…" oninput="applyFilters()">
+    <select class="filter-input" id="f-year" onchange="applyFilters()">
+      <option value="">Alle Jahre</option>
+    </select>
+    <select class="filter-input" id="f-status" onchange="applyFilters()">
+      <option value="">Alle Status</option>
+      <option value="draft">Entwurf</option>
+      <option value="active">Aktiv</option>
+      <option value="ready">Bericht bereit</option>
+      <option value="closed">Abgeschlossen</option>
+    </select>
+    <input class="filter-input" style="width:180px" type="text" id="f-unit" placeholder="Einheit…" oninput="applyFilters()">
+    <input class="filter-input" style="width:150px" type="text" id="f-owner" placeholder="Verantwortliche/r…" oninput="applyFilters()">
+    <button class="btn-clear" onclick="clearFilters()">Zurücksetzen</button>
+    <span class="toolbar__count" id="toolbar-count"></span>
+  </div>
 </div>
 
 <div class="page">
 
-  <div class="section-head">
-    <h2>Meine Feedbackfälle</h2>
-    <button class="btn btn--red" id="btn-new-case" onclick="toggleNewCase()">+ Neuen Fall erstellen</button>
-  </div>
+  <div class="stats-row" id="stats-row"></div>
 
-  <!-- NEW CASE PANEL -->
   <div class="new-case-panel" id="new-case-panel">
-    <div class="form-2col">
+    <div class="panel-head">
+      <h2>Neuen Feedbackfall erstellen</h2>
+      <button class="btn btn--ghost btn--sm" onclick="closeNewCase()">✕ Abbrechen</button>
+    </div>
+    <div class="form-grid">
       <div class="form-row">
         <label>Name der Führungsperson *</label>
         <input type="text" id="nc-name" placeholder="Dr. Maria Muster">
@@ -170,241 +195,548 @@
         <label>Funktion / Rolle</label>
         <input type="text" id="nc-role" placeholder="Leiterin Institut für …">
       </div>
-    </div>
-    <div class="form-2col">
       <div class="form-row">
-        <label>Einheit / Abteilung</label>
+        <label>Einheit / Departement</label>
         <input type="text" id="nc-unit" placeholder="Departement Biologie">
       </div>
       <div class="form-row">
-        <label>Prozessverantwortliche/r</label>
+        <label>Prozessjahr</label>
+        <select id="nc-year">
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Verantwortliche/r (HR)</label>
         <input type="text" id="nc-owner" placeholder="Ihr Name">
       </div>
+      <div class="form-row">
+        <label>Feedbackzyklus</label>
+        <select id="nc-cycle">
+          <option>Erstbeurteilung</option>
+          <option>Jahresfeedback</option>
+          <option>Entwicklungsfeedback</option>
+          <option>Abschlussfeedback</option>
+        </select>
+      </div>
+      <div class="form-row form-row--full">
+        <label>Interne Bemerkungen (nicht sichtbar für Teilnehmende)</label>
+        <textarea id="nc-notes" placeholder="Kontext, Ziele, besondere Hinweise…"></textarea>
+      </div>
     </div>
-    <div class="form-row">
-      <label>Bemerkungen (intern)</label>
-      <textarea id="nc-notes" placeholder="Kontext, Ziele des Feedbackprozesses …"></textarea>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:8px;">
+    <div style="display:flex;gap:10px;margin-top:16px;">
       <button class="btn btn--red" onclick="createCase()">Fall erstellen</button>
-      <button class="btn btn--ghost" onclick="toggleNewCase()">Abbrechen</button>
+      <button class="btn btn--ghost" onclick="closeNewCase()">Abbrechen</button>
     </div>
   </div>
 
-  <!-- CASE GRID -->
-  <div class="case-grid" id="case-grid"></div>
-  <div class="empty-state" id="empty-state" style="display:none">
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="#000" stroke-width="2"/><path d="M16 24h16M24 16v16" stroke="#000" stroke-width="2"/></svg>
-    <p>Noch keine Feedbackfälle vorhanden.<br>Erstellen Sie Ihren ersten Fall oben.</p>
+  <div class="case-table-wrap">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr class="case-table-head">
+          <th>Führungsperson</th>
+          <th class="hide-mobile">Einheit</th>
+          <th class="hide-mobile">Jahr / Zyklus</th>
+          <th>Selbstbild</th>
+          <th>Fremdbild</th>
+          <th>Status</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody id="case-tbody"></tbody>
+    </table>
+    <div class="empty" id="empty-state" style="display:none">
+      <p>Keine Fälle gefunden.</p>
+      <button class="btn btn--red" onclick="openNewCase()">+ Ersten Fall erstellen</button>
+    </div>
   </div>
 
-</div><!-- /.page -->
+</div>
 
 <div class="toast" id="toast"></div>
 
-<!-- DELETE CONFIRM MODAL -->
-<div class="modal-overlay" id="delete-modal">
+<div class="modal-bg" id="delete-modal">
   <div class="modal">
     <h2>Fall löschen?</h2>
-    <p>Dieser Vorgang kann nicht rückgängig gemacht werden. Alle Daten inkl. Selbst- und Fremdbild-Antworten werden unwiderruflich gelöscht.</p>
+    <p>Alle Daten — Selbstbild, Fremdbild-Antworten und Bericht — werden unwiderruflich gelöscht.</p>
     <div class="modal__actions">
-      <button class="btn btn--ghost" onclick="closeDeleteModal()">Abbrechen</button>
+      <button class="btn btn--ghost" onclick="closeModal('delete-modal')">Abbrechen</button>
       <button class="btn btn--red" id="confirm-delete-btn">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="export-modal">
+  <div class="modal">
+    <h2>Fall exportieren</h2>
+    <p id="export-modal-desc"></p>
+    <div class="export-options">
+      <div class="export-opt selected" id="exp-html" onclick="selectExport('html')">
+        <div class="export-opt__icon">📄</div>
+        <div class="export-opt__title">HTML Snapshot</div>
+        <div class="export-opt__desc">Vollständiger Bericht. Druckbar, offline nutzbar, als PDF speicherbar.</div>
+      </div>
+      <div class="export-opt" id="exp-json" onclick="selectExport('json')">
+        <div class="export-opt__icon">💾</div>
+        <div class="export-opt__title">JSON Backup</div>
+        <div class="export-opt__desc">Vollständige Rohdaten. Für Backup, Migration, nDSG-Auskunft.</div>
+      </div>
+      <div class="export-opt" id="exp-csv" onclick="selectExport('csv')">
+        <div class="export-opt__icon">📊</div>
+        <div class="export-opt__title">CSV / Excel</div>
+        <div class="export-opt__desc">Mittelwerte pro Subskala als Tabelle.</div>
+      </div>
+      <div class="export-opt" id="exp-text" onclick="selectExport('text')">
+        <div class="export-opt__icon">📝</div>
+        <div class="export-opt__title">Textbericht</div>
+        <div class="export-opt__desc">Lesbarer Textbericht für Protokolle oder E-Mail.</div>
+      </div>
+    </div>
+    <div class="modal__actions">
+      <button class="btn btn--ghost" onclick="closeModal('export-modal')">Abbrechen</button>
+      <button class="btn btn--red" onclick="doExport()">Exportieren</button>
     </div>
   </div>
 </div>
 
 <script src="cmt-data.js"></script>
 <script>
-let deletePendingId = null;
+let deletePendingId=null, exportPendingId=null, exportFormat='html', openMenuId=null;
 
-// ── RENDER ────────────────────────────────────────────────────
-function render() {
-  const cases = CMT.getCases();
-  const grid  = document.getElementById('case-grid');
-  const empty = document.getElementById('empty-state');
+function getFilters(){
+  return {
+    search: document.getElementById('f-search').value.trim().toLowerCase(),
+    year:   document.getElementById('f-year').value,
+    status: document.getElementById('f-status').value,
+    unit:   document.getElementById('f-unit').value.trim().toLowerCase(),
+    owner:  document.getElementById('f-owner').value.trim().toLowerCase(),
+  };
+}
+function clearFilters(){
+  ['f-search','f-unit','f-owner'].forEach(id=>document.getElementById(id).value='');
+  ['f-year','f-status'].forEach(id=>document.getElementById(id).value='');
+  render();
+}
+function applyFilters(){ render(); }
 
-  if (!cases.length) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  grid.innerHTML = cases.map(c => {
-    const done     = c.respondents.filter(r => r.submitted).length;
-    const total    = c.respondents.length;
-    const pct      = total ? Math.round(done / total * 100) : 0;
-    const selfDone = c.selfAnswers && Object.keys(c.selfAnswers).length > 10;
-    const status   = getStatus(c);
-    const statusLabel = { draft:'Entwurf', active:'Aktiv', complete:'Abgeschlossen', ready:'Bericht bereit' }[status];
-    const canReport  = selfDone && done >= 3;
-
-    return `
-      <div class="case-card" id="card-${c.id}">
-        <div class="case-card__name">${esc(c.name)}</div>
-        <div class="case-card__meta">${esc(c.role||'')}${c.role&&c.unit?' · ':''}${esc(c.unit||'')} · Erstellt ${formatDate(c.createdAt)}</div>
-        <span class="case-card__status status--${status}">${statusLabel}</span>
-
-        <div class="case-card__selbst">
-          <span class="dot dot--${selfDone?'green':'grey'}"></span>
-          Selbstbild: ${selfDone ? '<strong>Ausgefüllt</strong>' : 'Ausstehend'}
-          ${!selfDone ? `&nbsp;<a href="selbstbild.html?case=${c.id}" style="color:var(--red);text-decoration:underline;font-size:11px;">→ Öffnen</a>` : ''}
-        </div>
-
-        <div class="case-card__progress">
-          <div class="progress-label">
-            <span>Fremdbild-Rücklauf</span>
-            <span>${done} / ${total || '—'}</span>
-          </div>
-          <div class="progress-bar"><div class="progress-bar__fill" style="width:${pct}%"></div></div>
-        </div>
-
-        <div class="case-card__actions">
-          <button class="btn btn--dark btn--sm" onclick="toggleRespondents('${c.id}')">Feedbackgeber verwalten</button>
-          ${canReport
-            ? `<button class="btn btn--red btn--sm" onclick="openReport('${c.id}')">Bericht öffnen</button>`
-            : `<button class="btn btn--ghost btn--sm" disabled title="Mind. 3 Fremdbild-Rückmeldungen + Selbstbild nötig" style="opacity:.4;cursor:not-allowed;">Bericht (${done}/3)</button>`
-          }
-          <button class="btn btn--ghost btn--sm" onclick="confirmDelete('${c.id}')" style="color:#c00;border-color:#c00;">Löschen</button>
-        </div>
-
-        <!-- RESPONDENT PANEL -->
-        <div class="respondent-panel" id="resp-${c.id}" style="display:none;margin-top:16px;">
-          <h3>Feedbackgeber/innen (${total})</h3>
-          <div class="respondent-add">
-            <input type="email" id="email-${c.id}" placeholder="email@example.com" onkeydown="if(event.key==='Enter')addRespondent('${c.id}')">
-            <button class="btn btn--red btn--sm" onclick="addRespondent('${c.id}')">Hinzufügen</button>
-          </div>
-          <div class="respondent-list" id="rlist-${c.id}">
-            ${renderRespondents(c)}
-          </div>
-          ${total < 3 ? `
-          <div class="anonymity-warn">
-            <span>⚠</span>
-            <span><strong>Anonymitätsschwelle:</strong> Mindestens <strong>3 Feedbackgeber/innen</strong> müssen ausgefüllt haben, bevor ein Bericht generiert werden kann. Dies schützt die Anonymität der Feedbackgebenden (nDSG CH).</span>
-          </div>` : ''}
-        </div>
-
-      </div>`;
-  }).join('');
+function matchesFilters(c,f){
+  const year=(c.year||new Date(c.createdAt).getFullYear().toString());
+  if(f.search&&!c.name.toLowerCase().includes(f.search)) return false;
+  if(f.year&&year!==f.year) return false;
+  if(f.status&&getStatus(c)!==f.status) return false;
+  if(f.unit&&!(c.unit||'').toLowerCase().includes(f.unit)) return false;
+  if(f.owner&&!(c.owner||'').toLowerCase().includes(f.owner)) return false;
+  return true;
 }
 
-function renderRespondents(c) {
-  if (!c.respondents.length) return '<div style="font-size:11px;color:var(--grey);padding:8px 0;">Noch keine Feedbackgeber/innen hinzugefügt.</div>';
-  const base = window.location.href.replace('index.html','').replace(/\/$/, '');
-  return c.respondents.map(r => {
-    const link = `${base}/fremdbild.html?token=${r.token}&case=${c.id}`;
-    return `
-      <div class="respondent-item">
-        <span class="dot dot--${r.submitted?'green':'grey'}"></span>
-        <span class="respondent-item__email">${esc(r.email)}</span>
-        <span class="respondent-item__status ${r.submitted?'r-done':'r-pending'}">${r.submitted?'Eingegangen':'Ausstehend'}</span>
-        <span class="link-input" title="Klicken zum Kopieren" onclick="copyLink('${link}')">Link kopieren</span>
-        <button class="btn btn--ghost btn--sm" onclick="removeRespondent('${c.id}','${r.token}')" style="color:#c00;border-color:#c00;min-width:0;padding:0 8px;">✕</button>
-      </div>`;
-  }).join('');
-}
-
-// ── STATUS ────────────────────────────────────────────────────
-function getStatus(c) {
-  const done    = c.respondents.filter(r => r.submitted).length;
-  const selfDone = c.selfAnswers && Object.keys(c.selfAnswers).length > 10;
-  if (selfDone && done >= 3) return 'ready';
-  if (c.respondents.length > 0 || selfDone) return 'active';
+function getStatus(c){
+  if(c.status==='closed') return 'closed';
+  const done=c.respondents.filter(r=>r.submitted).length;
+  const selfDone=c.selfAnswers&&Object.keys(c.selfAnswers).length>10;
+  if(selfDone&&done>=3) return 'ready';
+  if(c.respondents.length>0||selfDone) return 'active';
   return 'draft';
 }
+const STATUS_LABEL={draft:'Entwurf',active:'Aktiv',ready:'Bericht bereit',closed:'Abgeschlossen'};
 
-// ── ACTIONS ───────────────────────────────────────────────────
-function toggleNewCase() {
-  const p = document.getElementById('new-case-panel');
-  p.classList.toggle('open');
+async function render(){
+  const allCases = await CMT.getCases();
+  const f=getFilters();
+  const cases=allCases.filter(c=>matchesFilters(c,f));
+
+  // Year dropdown
+  const years=[...new Set(allCases.map(c=>c.year||new Date(c.createdAt).getFullYear().toString()))].sort().reverse();
+  const sel=document.getElementById('f-year'),cur=sel.value;
+  sel.innerHTML='<option value="">Alle Jahre</option>'+years.map(y=>`<option value="${y}"${y===cur?' selected':''}>${y}</option>`).join('');
+
+  // Stats
+  const ready=allCases.filter(c=>getStatus(c)==='ready').length;
+  const active=allCases.filter(c=>getStatus(c)==='active').length;
+  const closed=allCases.filter(c=>getStatus(c)==='closed').length;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-card__val">${allCases.length}</div><div class="stat-card__lbl">Fälle total</div></div>
+    <div class="stat-card"><div class="stat-card__val">${active}</div><div class="stat-card__lbl">Aktiv / laufend</div></div>
+    <div class="stat-card"><div class="stat-card__val">${ready}</div><div class="stat-card__lbl">Bericht bereit</div></div>
+    <div class="stat-card"><div class="stat-card__val">${closed}</div><div class="stat-card__lbl">Abgeschlossen</div></div>`;
+
+  document.getElementById('toolbar-count').textContent=`${cases.length} von ${allCases.length} Fällen`;
+
+  const tbody=document.getElementById('case-tbody');
+  const empty=document.getElementById('empty-state');
+
+  if(!cases.length){ tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  tbody.innerHTML=cases.map(c=>{
+    const done=c.respondents.filter(r=>r.submitted).length;
+    const total=c.respondents.length;
+    const pct=total?Math.round(done/total*100):0;
+    const selfDone=c.selfAnswers&&Object.keys(c.selfAnswers).length>10;
+    const status=getStatus(c);
+    const year=c.year||new Date(c.createdAt).getFullYear();
+    const canReport=selfDone&&done>=3;
+
+    return `
+      <tr class="case-row">
+        <td class="case-row__cell">
+          <div class="case-name">${esc(c.name)}</div>
+          <div class="case-meta">${esc(c.role||'')}${c.owner?' · <em>'+esc(c.owner)+'</em>':''}</div>
+        </td>
+        <td class="case-row__cell hide-mobile">${esc(c.unit||'—')}</td>
+        <td class="case-row__cell hide-mobile">
+          <span class="year-badge">${year}</span>
+          <div style="font-size:11px;color:var(--grey);margin-top:4px">${esc(c.cycle||'—')}</div>
+        </td>
+        <td class="case-row__cell">
+          <span class="self-dot ${selfDone?'dot-green':'dot-grey'}"></span>
+          <span style="font-size:11px">${selfDone?'Ausgefüllt':'Ausstehend'}</span>
+          ${!selfDone?`<br><a href="selbstbild.html?case=${c.id}" style="font-size:10px;color:var(--red);text-decoration:underline">Öffnen →</a>`:''}
+        </td>
+        <td class="case-row__cell">
+          <div class="progress-mini">
+            <div class="progress-mini__bar"><div class="progress-mini__fill" style="width:${pct}%"></div></div>
+            <div class="progress-mini__lbl">${done}/${total||'0'} eingegangen</div>
+          </div>
+        </td>
+        <td class="case-row__cell"><span class="status-badge s-${status}">${STATUS_LABEL[status]}</span></td>
+        <td class="case-row__cell">
+          <div class="action-menu" id="mw-${c.id}">
+            <button class="action-btn" onclick="toggleMenu('${c.id}')">Aktionen ▾</button>
+            <div class="action-dropdown" id="menu-${c.id}">
+              <button onclick="toggleRespondents('${c.id}');closeMenu()">Feedbackgeber verwalten</button>
+              <a href="selbstbild.html?case=${c.id}" onclick="closeMenu()">Selbstbild öffnen</a>
+              ${canReport
+                ?`<a href="report.html?case=${c.id}" onclick="closeMenu()" style="font-weight:700;color:#b45309">📊 Bericht öffnen</a>`
+                :`<button disabled>Bericht (${done}/3 nötig)</button>`}
+              <div class="action-sep"></div>
+              <button onclick="openExport('${c.id}');closeMenu()">Exportieren…</button>
+              <button onclick="copyCase('${c.id}');closeMenu()">Fall duplizieren</button>
+              ${status!=='closed'
+                ?`<button onclick="closeCase('${c.id}');closeMenu()">Als abgeschlossen markieren</button>`
+                :`<button onclick="reopenCase('${c.id}');closeMenu()">Wieder öffnen</button>`}
+              <div class="action-sep"></div>
+              <button class="danger" onclick="confirmDelete('${c.id}');closeMenu()">Fall löschen</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr class="resp-row" id="resp-row-${c.id}">
+        <td colspan="7" style="padding:0">
+          <div class="resp-inner">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <strong style="font-size:13px">Feedbackgeber/innen — ${esc(c.name)}</strong>
+              <div style="display:flex;gap:8px">
+                ${total>0&&done<total?`<button class="btn btn--dark btn--sm" onclick="sendAllFremdbildMails('${c.id}')">✉ Alle Ausstehende einladen</button>`:''}
+                <button class="btn btn--ghost btn--sm" onclick="toggleRespondents('${c.id}')">Schliessen</button>
+              </div>
+            </div>
+            <div class="resp-grid" id="rlist-${c.id}">${renderRespondents(c)}</div>
+            <div class="add-resp">
+              <input type="email" id="email-${c.id}" placeholder="email@unibas.ch" onkeydown="if(event.key==='Enter')addRespondent('${c.id}')">
+              <button class="btn btn--red btn--sm" onclick="addRespondent('${c.id}')">Hinzufügen</button>
+            </div>
+            ${total<3?`<div class="anon-bar">⚠ <span>Mindestens <strong>3 Fremdbild-Rückmeldungen</strong> erforderlich für Anonymität und Berichtgenerierung (nDSG CH).</span></div>`:''}
+            <div class="selbst-link-bar">
+              🔗 <strong>Selbstbild-Link</strong> für die Führungsperson:
+              <button class="copy-link" onclick="sendSelbstbildMail('${c.id}','${esc(c.name)}')">✉ Per Mail senden</button>
+              <button class="copy-link" onclick="copySelbstbildLink('${c.id}')">Link kopieren</button>
+              <span style="color:#888;font-size:10px;display:block;margin-top:4px">Nur die Führungsperson erhält diesen Link. Ihr Selbstbild ist vertraulich und nur für sie sichtbar.</span>
+            </div>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
 }
 
-function createCase() {
-  const name  = document.getElementById('nc-name').value.trim();
-  if (!name) { showToast('Bitte Name der Führungsperson eingeben.'); return; }
-  const c = {
-    id: CMT.newId(),
-    name,
-    role:         document.getElementById('nc-role').value.trim(),
-    unit:         document.getElementById('nc-unit').value.trim(),
-    owner:        document.getElementById('nc-owner').value.trim(),
-    notes:        document.getElementById('nc-notes').value.trim(),
-    createdAt:    new Date().toISOString(),
-    respondents:  [],
-    selfAnswers:  {},
-    selfReflection: {}
+function renderRespondents(c){
+  if(!c.respondents.length) return '<div style="font-size:11px;color:var(--grey);grid-column:1/-1;padding:8px 0">Noch keine Feedbackgeber/innen hinzugefügt.</div>';
+  const base=getBase();
+  return c.respondents.map(r=>{
+    const link=`${base}/fremdbild.html?token=${r.token}&case=${c.id}`;
+    return `<div class="resp-item">
+      <span class="self-dot ${r.submitted?'dot-green':'dot-grey'}"></span>
+      <span class="resp-item__email">${esc(r.email)}</span>
+      <span class="resp-item__status ${r.submitted?'r-done':'r-pending'}">${r.submitted?'✓ Eingegangen':'Ausstehend'}</span>
+      ${!r.submitted
+        ? `<button class="copy-link" onclick="sendFremdbildMail('${r.email}','${link}','${esc(c.name)}')">✉ Per Mail einladen</button>
+           <button class="copy-link" onclick="copyToClipboard('${link}','Link kopiert!')">Link kopieren</button>
+           <button class="copy-link" style="color:#c00" onclick="removeRespondent('${c.id}','${r.token}')">Entfernen</button>`
+        : `<button class="copy-link" onclick="copyToClipboard('${link}','Link kopiert!')">Link kopieren</button>`
+      }
+    </div>`;
+  }).join('');
+}
+
+// ── CASE ACTIONS ──────────────────────────────────────────────
+function openNewCase(){ document.getElementById('new-case-panel').classList.add('open'); window.scrollTo({top:0,behavior:'smooth'}); document.getElementById('nc-name').focus(); }
+function closeNewCase(){ document.getElementById('new-case-panel').classList.remove('open'); }
+
+function createCase(){
+  const name=document.getElementById('nc-name').value.trim();
+  if(!name){ showToast('Bitte Name der Führungsperson eingeben.'); return; }
+  const c={
+    id:CMT.newId(), name,
+    role:  document.getElementById('nc-role').value.trim(),
+    unit:  document.getElementById('nc-unit').value.trim(),
+    year:  document.getElementById('nc-year').value,
+    cycle: document.getElementById('nc-cycle').value,
+    owner: document.getElementById('nc-owner').value.trim(),
+    notes: document.getElementById('nc-notes').value.trim(),
+    createdAt: new Date().toISOString(),
+    respondents:[], selfAnswers:{}, selfReflection:{}
   };
   CMT.saveCase(c);
-  ['nc-name','nc-role','nc-unit','nc-owner','nc-notes'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('new-case-panel').classList.remove('open');
-  render();
+  ['nc-name','nc-role','nc-unit','nc-owner','nc-notes'].forEach(id=>document.getElementById(id).value='');
+  closeNewCase(); render();
   showToast(`Fall «${name}» erstellt.`);
 }
 
-function toggleRespondents(id) {
-  const el = document.getElementById(`resp-${id}`);
-  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+async function copyCase(id){
+  const orig = await CMT.getCase(id); if(!orig) return;
+  await CMT.saveCase({...orig,id:CMT.newId(),name:orig.name+' (Kopie)',createdAt:new Date().toISOString(),respondents:[],selfAnswers:{},selfReflection:{},status:undefined});
+  render(); showToast('Fall dupliziert.');
 }
+async function closeCase(id){ const c=await CMT.getCase(id); c.status='closed'; await CMT.saveCase(c); render(); showToast('Als abgeschlossen markiert.'); }
+async function reopenCase(id){ const c=await CMT.getCase(id); delete c.status; await CMT.saveCase(c); render(); showToast('Fall wieder geöffnet.'); }
 
-function addRespondent(caseId) {
-  const input = document.getElementById(`email-${caseId}`);
-  const email = input.value.trim().toLowerCase();
-  if (!email || !email.includes('@')) { showToast('Bitte gültige E-Mail-Adresse eingeben.'); return; }
-  const c = CMT.getCase(caseId);
-  if (c.respondents.find(r => r.email === email)) { showToast('Diese E-Mail ist bereits vorhanden.'); return; }
-  c.respondents.push({ email, token: CMT.newToken(), submitted: false, submittedAt: null });
-  CMT.saveCase(c);
-  input.value = '';
+// ── RESPONDENTS ───────────────────────────────────────────────
+function toggleRespondents(id){
+  const row=document.getElementById(`resp-row-${id}`);
+  const isOpen=row.classList.toggle('open');
+  if(isOpen) setTimeout(()=>document.getElementById(`email-${id}`)?.focus(),50);
+}
+async function addRespondent(caseId){
+  const input=document.getElementById(`email-${caseId}`);
+  const email=input.value.trim().toLowerCase();
+  if(!email||!email.includes('@')){ showToast('Bitte gültige E-Mail eingeben.'); return; }
+  const c = await CMT.getCase(caseId);
+  if(c.respondents.find(r=>r.email===email)){ showToast('Diese E-Mail ist bereits vorhanden.'); return; }
+  const newR = await CMT.addRespondent(caseId, email);
+  input.value=''; render();
+  setTimeout(()=>{
+    document.getElementById(`resp-row-${caseId}`)?.classList.add('open');
+    if(confirm(`${email} hinzugefügt.\n\nEinladungs-E-Mail jetzt öffnen?`)){
+      const link=`${getBase()}/fremdbild.html?token=${newR.token}&case=${caseId}`;
+      sendFremdbildMail(email, link, c.name);
+    }
+  }, 300);
+}
+async function removeRespondent(caseId,token){
+  await CMT.removeRespondent(caseId,token);
   render();
-  showToast('Feedbackgeber/in hinzugefügt.');
+  document.getElementById(`resp-row-${caseId}`)?.classList.add('open');
+}
+function copySelbstbildLink(caseId){ copyToClipboard(`${getBase()}/selbstbild.html?case=${caseId}`,'Selbstbild-Link kopiert!'); }
+
+// ── MAILTO ────────────────────────────────────────────────────
+function sendSelbstbildMail(caseId, personName) {
+  const link = `${getBase()}/selbstbild.html?case=${caseId}`;
+  const subject = encodeURIComponent(`360° Führungsfeedback – Ihr persönlicher Selbstbild-Link`);
+  const body = encodeURIComponent(
+`Guten Tag ${personName}
+
+Im Rahmen des 360° Führungsfeedbacks der Universität Basel erhalten Sie hier Ihren persönlichen Link zum Selbstbild-Fragebogen:
+
+${link}
+
+Dieser Link ist nur für Sie bestimmt. Ihre Antworten sind vertraulich und werden ausschliesslich Ihnen im Vergleichsbericht zugänglich gemacht.
+
+Bitte füllen Sie den Fragebogen bis zum vereinbarten Datum aus. Bei Fragen wenden Sie sich an Ihre HR-Ansprechperson.
+
+Freundliche Grüsse
+Leadership & Development | Universität Basel`
+  );
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  showToast('E-Mail-Client geöffnet.');
 }
 
-function removeRespondent(caseId, token) {
-  const c = CMT.getCase(caseId);
-  c.respondents = c.respondents.filter(r => r.token !== token);
-  CMT.saveCase(c);
-  render();
+function sendFremdbildMail(email, link, personName) {
+  const subject = encodeURIComponent(`Einladung zum 360° Führungsfeedback – ${personName}`);
+  const body = encodeURIComponent(
+`Guten Tag
+
+Sie wurden eingeladen, im Rahmen des 360° Führungsfeedbacks der Universität Basel eine Rückmeldung zu ${personName} zu geben.
+
+Ihr persönlicher Feedback-Link:
+${link}
+
+Wichtige Hinweise:
+• Dieser Link ist nur für Sie bestimmt – bitte nicht weitergeben.
+• Ihre Antworten sind anonym. Individuelle Rückmeldungen werden nie an die Führungsperson weitergegeben.
+• Die Auswertung erfolgt nur, wenn mindestens 3 Personen geantwortet haben (Anonymitätsschutz gemäss nDSG).
+• Das Ausfüllen dauert ca. 20 Minuten.
+
+Bitte füllen Sie den Fragebogen bis zum vereinbarten Datum aus.
+
+Freundliche Grüsse
+Leadership & Development | Universität Basel`
+  );
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  showToast(`E-Mail-Client geöffnet für ${email}`);
 }
 
-function openReport(caseId) {
-  window.location.href = `report.html?case=${caseId}`;
+function sendAllFremdbildMails(caseId) {
+  const c = CMT._localGetCases().find(x => x.id === caseId);
+  if (!c) return;
+  const pending = c.respondents.filter(r => !r.submitted);
+  if (!pending.length) { showToast('Alle haben bereits geantwortet.'); return; }
+  const base = getBase();
+  // Build one mailto with all pending as BCC
+  const bccs = pending.map(r => r.email).join(',');
+  const subject = encodeURIComponent(`Einladung zum 360° Führungsfeedback – ${c.name}`);
+  const body = encodeURIComponent(
+`Guten Tag
+
+Sie wurden eingeladen, im Rahmen des 360° Führungsfeedbacks der Universität Basel eine Rückmeldung zu ${c.name} zu geben.
+
+Bitte öffnen Sie den Link, den Sie separat erhalten haben, um den Fragebogen auszufüllen.
+
+Wichtige Hinweise:
+• Ihre Antworten sind anonym.
+• Die Auswertung erfolgt nur bei mindestens 3 Rückmeldungen.
+• Das Ausfüllen dauert ca. 20 Minuten.
+
+Freundliche Grüsse
+Leadership & Development | Universität Basel`
+  );
+  window.location.href = `mailto:?bcc=${bccs}&subject=${subject}&body=${body}`;
+  showToast(`E-Mail-Client geöffnet (${pending.length} Empfänger).`);
 }
 
-function confirmDelete(id) {
-  deletePendingId = id;
-  document.getElementById('delete-modal').classList.add('open');
+// ── EXPORT ────────────────────────────────────────────────────
+function openExport(id){
+  exportPendingId=id; exportFormat='html';
+  document.querySelectorAll('.export-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('exp-html').classList.add('selected');
+  const c=CMT.getCase(id);
+  document.getElementById('export-modal-desc').textContent=`${c.name} · ${c.year||new Date(c.createdAt).getFullYear()} · ${c.unit||''}`;
+  document.getElementById('export-modal').classList.add('open');
 }
-function closeDeleteModal() {
-  deletePendingId = null;
-  document.getElementById('delete-modal').classList.remove('open');
+function selectExport(fmt){
+  exportFormat=fmt;
+  document.querySelectorAll('.export-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById(`exp-${fmt}`).classList.add('selected');
 }
-document.getElementById('confirm-delete-btn').onclick = () => {
-  if (!deletePendingId) return;
-  const cases = CMT.getCases().filter(c => c.id !== deletePendingId);
-  CMT.saveCases(cases);
-  closeDeleteModal();
-  render();
-  showToast('Fall gelöscht.');
+function doExport(){
+  if(!exportPendingId) return;
+  const c=CMT.getCase(exportPendingId);
+  closeModal('export-modal');
+  if(!c) return;
+  switch(exportFormat){
+    case 'json': exportJSON(c); break;
+    case 'csv':  exportCSV(c);  break;
+    case 'text': exportText(c); break;
+    default:     exportHTML(c); break;
+  }
+}
+
+function exportJSON(c){
+  download(new Blob([JSON.stringify(c,null,2)],{type:'application/json'}),`360_${slug(c.name)}_${c.year||'2026'}.json`);
+  showToast('JSON exportiert.');
+}
+
+function exportCSV(c){
+  const resp=c.respondents.filter(r=>r.submitted);
+  let csv='Kompetenz;Subskala;Selbst MW;Fremd MW;Differenz\n';
+  CMT.sections.forEach(s=>{
+    s.subsections.filter(ss=>!ss.trap).forEach(ss=>{
+      const sa=CMT.calcSubsectionAvg(c.selfAnswers,ss);
+      const fv=resp.map(r=>CMT.calcSubsectionAvg(r.answers,ss)).filter(v=>v!==null);
+      const fa=fv.length?fv.reduce((a,b)=>a+b,0)/fv.length:null;
+      const d=(sa!==null&&fa!==null)?(sa-fa).toFixed(2):'';
+      csv+=`"${s.de}";"${ss.de}";${sa?sa.toFixed(2):''};${fa?fa.toFixed(2):''};"${d}"\n`;
+    });
+  });
+  download(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),`360_${slug(c.name)}_${c.year||'2026'}.csv`);
+  showToast('CSV exportiert.');
+}
+
+function exportText(c){
+  const resp=c.respondents.filter(r=>r.submitted);
+  const date=new Date().toLocaleDateString('de-CH');
+  let txt=`360° FÜHRUNGSFEEDBACK — UNIVERSITÄT BASEL\n${'='.repeat(50)}\n\n`;
+  txt+=`Führungsperson: ${c.name}\nFunktion:       ${c.role||'—'}\nEinheit:        ${c.unit||'—'}\nJahr:           ${c.year||'—'}\nZyklus:         ${c.cycle||'—'}\nFeedbackgeber:  ${resp.length}\nBericht:        ${date}\n\n`;
+  CMT.sections.forEach((section,si)=>{
+    txt+=`\n${si+1}. ${section.de.toUpperCase()}\n${'-'.repeat(40)}\n`;
+    const sa=CMT.calcSectionAvg(c.selfAnswers,section);
+    const fv=resp.map(r=>CMT.calcSectionAvg(r.answers,section)).filter(v=>v!==null);
+    const fa=fv.length?fv.reduce((a,b)=>a+b,0)/fv.length:null;
+    txt+=`Selbst Ø: ${sa?sa.toFixed(2):'—'}  |  Fremd Ø: ${fa?fa.toFixed(2):'—'}\n\n`;
+    section.subsections.filter(ss=>!ss.trap).forEach(ss=>{
+      const ssa=CMT.calcSubsectionAvg(c.selfAnswers,ss);
+      const sfv=resp.map(r=>CMT.calcSubsectionAvg(r.answers,ss)).filter(v=>v!==null);
+      const sfa=sfv.length?sfv.reduce((a,b)=>a+b,0)/sfv.length:null;
+      const diff=(ssa!==null&&sfa!==null)?(ssa-sfa):null;
+      const flag=diff!==null&&Math.abs(diff)>=0.8?(diff>0?' ⚠ Blinder Fleck':' ★ Verstärkte Ressource'):'';
+      txt+=`  ${ss.de}\n    Selbst: ${ssa?ssa.toFixed(2):'—'}  Fremd: ${sfa?sfa.toFixed(2):'—'}${flag}\n\n`;
+    });
+  });
+  download(new Blob([txt],{type:'text/plain;charset=utf-8'}),`360_${slug(c.name)}_${c.year||'2026'}.txt`);
+  showToast('Textbericht exportiert.');
+}
+
+function exportHTML(c){
+  window.open(`report.html?case=${c.id}`, '_blank');
+  showToast('Bericht geöffnet. Drucken → Als PDF speichern.');
+}
+
+// ── MENU ──────────────────────────────────────────────────────
+function toggleMenu(id){
+  const menu=document.getElementById(`menu-${id}`);
+  const wasOpen=menu.classList.contains('open');
+  closeMenu();
+  if(!wasOpen){ menu.classList.add('open'); openMenuId=id; }
+}
+function closeMenu(){
+  if(openMenuId) document.getElementById(`menu-${openMenuId}`)?.classList.remove('open');
+  openMenuId=null;
+}
+document.addEventListener('click',e=>{ if(!e.target.closest('.action-menu')) closeMenu(); });
+
+// ── DELETE ────────────────────────────────────────────────────
+function confirmDelete(id){ deletePendingId=id; document.getElementById('delete-modal').classList.add('open'); }
+document.getElementById('confirm-delete-btn').onclick=async()=>{
+  if(!deletePendingId) return;
+  await CMT.deleteCase(deletePendingId);
+  closeModal('delete-modal'); render(); showToast('Fall gelöscht.');
 };
 
-function copyLink(link) {
-  navigator.clipboard.writeText(link).then(() => showToast('Link kopiert!')).catch(() => {
-    prompt('Link zum Kopieren:', link);
-  });
+function openExport(id){
+  exportPendingId=id; exportFormat='html';
+  document.querySelectorAll('.export-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('exp-html').classList.add('selected');
+  const c=CMT._localGetCases().find(x=>x.id===id) || {name:id,year:'',unit:''};
+  document.getElementById('export-modal-desc').textContent=`${c.name} · ${c.year||new Date(c.createdAt||Date.now()).getFullYear()} · ${c.unit||''}`;
+  document.getElementById('export-modal').classList.add('open');
+}
+function selectExport(fmt){
+  exportFormat=fmt;
+  document.querySelectorAll('.export-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById(`exp-${fmt}`).classList.add('selected');
+}
+async function doExport(){
+  if(!exportPendingId) return;
+  const c = await CMT.getCase(exportPendingId);
+  closeModal('export-modal');
+  if(!c) return;
+  switch(exportFormat){
+    case 'json': exportJSON(c); break;
+    case 'csv':  exportCSV(c);  break;
+    case 'text': exportText(c); break;
+    default:     exportHTML(c); break;
+  }
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function formatDate(iso) { try { return new Date(iso).toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'numeric'}); } catch { return ''; } }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.remove('show');
-  void t.offsetWidth;
-  t.classList.add('show');
-}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); deletePendingId=null; exportPendingId=null; }
+document.querySelectorAll('.modal-bg').forEach(el=>el.addEventListener('click',e=>{ if(e.target===el) closeModal(el.id); }));
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function slug(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_'); }
+function getBase(){ return window.location.href.replace(/\/[^/]*$/,''); }
+function download(blob,name){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href); }
+function copyToClipboard(text,msg){ navigator.clipboard.writeText(text).then(()=>showToast(msg||'Kopiert!')).catch(()=>prompt('Kopieren:',text)); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); }
 
 render();
 </script>
