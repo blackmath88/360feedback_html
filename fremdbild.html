@@ -222,9 +222,9 @@ let openAnswers = {};
 let totalQ = 0;
 
 // ── INIT ──────────────────────────────────────────────────────
-function init() {
+async function init() {
   if (!TOKEN || !CASE_ID) { showError(); return; }
-  caseData   = CMT.getCase(CASE_ID);
+  caseData   = await CMT.getCase(CASE_ID);
   if (!caseData) { showError(); return; }
   respondent = caseData.respondents.find(r => r.token === TOKEN);
   if (!respondent) { showError(); return; }
@@ -332,7 +332,7 @@ function resetForm() {
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────
-function submitFeedback() {
+async function submitFeedback() {
   const totalAnswered = Object.keys(answers).length;
   if (totalAnswered < totalQ) {
     alert(`Bitte beantworten Sie alle ${totalQ} Fragen bevor Sie einreichen.`);
@@ -340,16 +340,12 @@ function submitFeedback() {
   }
   if (!confirm('Möchten Sie Ihr Feedback jetzt einreichen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
 
-  // Save to localStorage under the case
-  const c = CMT.getCase(CASE_ID);
-  const resp = c.respondents.find(r => r.token === TOKEN);
-  resp.submitted   = true;
-  resp.submittedAt = new Date().toISOString();
-  resp.answers     = { ...answers };
-  resp.openAnswers = { ...openAnswers };
-  CMT.saveCase(c);
+  const result = await CMT.submitFremdbild(TOKEN, CASE_ID, { ...answers }, { ...openAnswers });
+  if (!result?.ok && result !== undefined) {
+    alert('Fehler beim Einreichen. Bitte versuchen Sie es erneut.');
+    return;
+  }
 
-  // Show thank you
   document.getElementById('main-content').style.display = 'none';
   document.getElementById('thankyou').classList.add('show');
 }
