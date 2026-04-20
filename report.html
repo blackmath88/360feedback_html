@@ -242,29 +242,72 @@ const REMARKS = [
 const params  = new URLSearchParams(window.location.search);
 const CASE_ID = params.get('case');
 
-function init() {
-  if (!CASE_ID) { showError(); return; }
-  const c = CMT.getCase(CASE_ID);
-  if (!c) { showError(); return; }
+async function init() {
+  if (!CASE_ID) { showError('Keine Fall-ID in der URL.'); return; }
 
-  const submittedRespondents = c.respondents.filter(r => r.submitted);
-  const selfDone = c.selfAnswers && Object.keys(c.selfAnswers).length > 10;
+  let c;
+  try {
+    c = await CMT.getReportData(CASE_ID);
+  } catch(e) {
+    showError('Fehler beim Laden: ' + e.message);
+    return;
+  }
 
-  if (!selfDone || submittedRespondents.length < 3) { showError(); return; }
+  if (!c) { showError('Fall nicht gefunden.'); return; }
+
+  // Normalise respondents — Supabase returns snake_case, localStorage camelCase
+  const respondents = (c.respondents || []).map(r => ({
+    ...r,
+    submitted:   r.submitted,
+    answers:     r.answers     || r.answers     || null,
+    openAnswers: r.open_answers || r.openAnswers || null,
+  }));
+
+  const submittedRespondents = respondents.filter(r => r.submitted && r.answers && Object.keys(r.answers).length > 0);
+
+  // selfAnswers can come as nested {answers:{...}} from Supabase or flat from localStorage
+  const selfAnswers    = c.selfAnswers?.answers     || c.selfAnswers    || {};
+  const selfReflection = c.selfAnswers?.reflection  || c.selfReflection || {};
+  const selfDone       = Object.keys(selfAnswers).length > 10;
+
+  // DEBUG — remove after confirming it works
+  console.log('[Report] case:', c.name);
+  console.log('[Report] selfAnswers keys:', Object.keys(selfAnswers).length);
+  console.log('[Report] submittedRespondents:', submittedRespondents.length);
+  console.log('[Report] raw respondents:', respondents);
+
+  if (!selfDone) {
+    showError(`Selbstbild noch nicht ausgefüllt (${Object.keys(selfAnswers).length} Antworten gefunden).`);
+    return;
+  }
+  if (submittedRespondents.length < 3) {
+    showError(`Nicht genügend Fremdbild-Rückmeldungen (${submittedRespondents.length}/3 eingegangen).`);
+    return;
+  }
+
+  // Build normalised case object for all render functions
+  const normCase = {
+    ...c,
+    selfAnswers,
+    selfReflection,
+    respondents
+  };
 
   document.getElementById('report-content').style.display = 'block';
   document.getElementById('nav-sub').textContent = c.name + (c.unit ? ' · ' + c.unit : '');
 
-  renderHeader(c, submittedRespondents);
-  renderSpider(c, submittedRespondents);
-  renderSections(c, submittedRespondents);
-  renderGapTable(c, submittedRespondents);
-  renderOpenAnswers(c, submittedRespondents);
+  renderHeader(normCase, submittedRespondents);
+  renderSpider(normCase, submittedRespondents);
+  renderSections(normCase, submittedRespondents);
+  renderGapTable(normCase, submittedRespondents);
+  renderOpenAnswers(normCase, submittedRespondents);
   renderRemarks();
 }
 
-function showError() {
-  document.getElementById('error-page').style.display = 'block';
+function showError(msg) {
+  const el = document.getElementById('error-page');
+  el.style.display = 'block';
+  if (msg) el.innerHTML += `<p style="font-size:11px;color:#888;margin-top:12px;font-family:monospace">${msg}</p>`;
 }
 
 // ── HEADER ────────────────────────────────────────────────────
