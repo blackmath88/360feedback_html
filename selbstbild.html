@@ -920,6 +920,7 @@
 
   </div><!-- /.page -->
 
+  <script src="cmt-data.js"></script>
   <script>
   // ================================================================
   // UI STRINGS  —  bilingual labels for static elements
@@ -1953,27 +1954,33 @@ sr-question	Was sollten Sie weniger tun oder ganz darauf verzichten, um noch wir
   const _caseParams = new URLSearchParams(window.location.search);
   const _caseId = _caseParams.get('case');
 
-  if (_caseId) {
-    // Load existing self-answers from case if available
-    const _existingCase = (() => {
-      try { return JSON.parse(localStorage.getItem('cmt360_cases')||'[]').find(c=>c.id===_caseId)||null; } catch { return null; }
-    })();
-
-    if (_existingCase && _existingCase.selfAnswers && Object.keys(_existingCase.selfAnswers).length > 0) {
-      // Pre-fill radio buttons from saved case data
-      Object.entries(_existingCase.selfAnswers).forEach(([name, val]) => {
-        const r = document.querySelector(`input[type="radio"][name="${name}"][value="${val}"]`);
-        if (r) { r.checked = true; }
-      });
-      if (_existingCase.selfReflection) {
-        Object.entries(_existingCase.selfReflection).forEach(([name, val]) => {
+  // ── LOAD & PREFILL FROM SUPABASE / LOCALSTORAGE ───────────────
+  async function _loadCaseData() {
+    if (!_caseId) return;
+    try {
+      const saved = await CMT.getSelfAssessment(_caseId);
+      if (!saved) return;
+      const answers    = saved.answers    || saved; // handle both shapes
+      const reflection = saved.reflection || {};
+      if (Object.keys(answers).length > 0) {
+        Object.entries(answers).forEach(([name, val]) => {
+          const r = document.querySelector(`input[type="radio"][name="${name}"][value="${val}"]`);
+          if (r) r.checked = true;
+        });
+      }
+      if (Object.keys(reflection).length > 0) {
+        Object.entries(reflection).forEach(([name, val]) => {
           const el = document.querySelector(`textarea[name="${name}"]`);
           if (el) el.value = val;
         });
       }
+    } catch(e) {
+      console.warn('[Selbstbild] load fallback:', e.message);
     }
+  }
 
-    // Show back-to-case button in nav area
+  if (_caseId) {
+    // Show back + save buttons
     const _backBtn = document.createElement('div');
     _backBtn.style.cssText = 'position:fixed;top:12px;right:16px;z-index:999;display:flex;gap:8px;';
     _backBtn.innerHTML = `
@@ -1982,7 +1989,7 @@ sr-question	Was sollten Sie weniger tun oder ganz darauf verzichten, um noch wir
     document.body.appendChild(_backBtn);
   }
 
-  function _saveToCaseNow() {
+  async function _saveToCaseNow() {
     if (!_caseId) return;
     const answers = {};
     document.querySelectorAll('input[type="radio"]:checked').forEach(r => {
@@ -1992,28 +1999,26 @@ sr-question	Was sollten Sie weniger tun oder ganz darauf verzichten, um noch wir
     document.querySelectorAll('textarea[name]').forEach(ta => {
       if (ta.value.trim()) reflections[ta.name] = ta.value.trim();
     });
-    const cases = JSON.parse(localStorage.getItem('cmt360_cases')||'[]');
-    const idx = cases.findIndex(c => c.id === _caseId);
-    if (idx >= 0) {
-      cases[idx].selfAnswers    = answers;
-      cases[idx].selfReflection = reflections;
-      localStorage.setItem('cmt360_cases', JSON.stringify(cases));
+    try {
+      await CMT.saveSelfAssessment(_caseId, answers, reflections);
       const btn = document.getElementById('_save-btn');
       if (btn) { btn.textContent = '✓ Gespeichert'; setTimeout(() => btn.textContent = 'Zwischenspeichern', 2000); }
+    } catch(e) {
+      console.warn('[Selbstbild] save error:', e.message);
     }
   }
 
-  // Auto-save every 30 seconds if caseId present
+  // Auto-save every 30 seconds
   if (_caseId) setInterval(_saveToCaseNow, 30000);
 
-  // Override the existing export button to also save to case before exporting
+  // Override export to save first
   const _origExport = window.exportSnapshot;
   window.exportSnapshot = function() {
     _saveToCaseNow();
     if (_origExport) _origExport();
   };
 
-  // Save on evaluate
+  // Override evaluate to save first
   const _origEval = window.runEvaluation;
   window.runEvaluation = function() {
     _saveToCaseNow();
@@ -2028,6 +2033,11 @@ sr-question	Was sollten Sie weniger tun oder ganz darauf verzichten, um noch wir
   renderSelfreflection();
   renderForm();
   restoreState();  // calls setLang, which populates all data-i18n text
+
+  // Load saved data from Supabase after form is rendered
+  if (_caseId) {
+    _loadCaseData().then(() => checkAllAnswered());
+  }
   checkAllAnswered();
 
   // Warn before unload only when localStorage is unavailable
