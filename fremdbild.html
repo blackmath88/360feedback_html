@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>360° Führungsfeedback – Fremdeinschätzung | Universität Basel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=PT+Serif&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:        #d20537;
+      --teal:       #a5d7d2;
+      --trap:       #5D666D;
+      --grey-light: #d0d0d0;
+      --grey-dark:  #222;
+      --hellrot:    #eb829b;
+      --col-1: #d21039; --col-2: #bebec8; --col-3: #006f6f; --col-4: #eb829b; --col-5: #1EA5A5;
+      --max-w: 1280px; --pad-l: 284px; --pad-r: 282px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; font-size: 12px; background: #fff; color: #000; }
+
+    .nav { background: var(--teal); }
+    .nav__inner { max-width: var(--max-w); margin: 0 auto; height: 181px; display: flex; align-items: center; padding: 0 49px; }
+    .nav__logo svg { display: block; height: 75px; width: auto; }
+
+    .page { max-width: var(--max-w); margin: 0 auto; padding-bottom: 4rem; }
+
+    .intro { padding: 39px 0 0; margin-left: var(--pad-l); margin-right: var(--pad-r); }
+    .intro__title { font-family: 'PT Serif', serif; font-size: 25px; font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
+    .intro__person { background: #f4f6fb; border-left: 4px solid var(--teal); padding: 12px 16px; margin-bottom: 20px; font-size: 13px; }
+    .intro__person strong { display: block; font-size: 15px; margin-bottom: 2px; }
+    .intro__body { line-height: 1.6; }
+    .intro__body p + p { margin-top: .75em; }
+
+    .scale-legend { margin: 32px 0 52px var(--pad-l); max-width: 563px; }
+    .scale-legend__heading { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+    .scale-legend__grid { display: flex; }
+    .scale-legend__col { flex: 1; border-left: 1px solid var(--grey-light); padding: 6px 4px 6px 8px; text-align: center; }
+    .scale-legend__col:last-child { border-right: 1px solid var(--grey-light); }
+    .scale-legend__sym { display: block; font-size: 14px; margin-bottom: 6px; }
+    .scale-legend__lbl { display: block; }
+
+    .q-section { display: flex; align-items: flex-start; padding: 3rem var(--pad-r) 56px 142px; }
+    .q-section__icon { width: 100px; flex-shrink: 0; }
+    .q-section__body { flex: 1; margin-left: 39px; }
+    .q-section__head { display: flex; align-items: baseline; border-bottom: 2px solid var(--border-color); margin-bottom: 16px; }
+    .q-section__num { font-size: 40px; font-weight: 300; color: var(--red); line-height: 1; width: 26px; flex-shrink: 0; }
+    .q-section__title { font-size: 18px; font-weight: 700; line-height: 1.2; padding: 10px; }
+
+    .q-subsection { --border-color: var(--grey-light); }
+    .q-subsection.trap { --border-color: var(--trap); }
+    .q-subsection__hdr { display: flex; align-items: center; padding: 8px 0; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+    .q-subsection__indent { width: 26px; flex-shrink: 0; }
+    .q-subsection__name { font-size: 14px; font-weight: 700; flex: 1; }
+    .q-subsection__name.trap { color: var(--trap); font-style: italic; }
+    .rating-hdr { display: flex; width: 197px; flex-shrink: 0; justify-content: space-around; }
+    .rating-hdr span { font-size: 14px; text-align: center; min-width: 24px; }
+
+    .q-list { border: 1px solid var(--border-color); border-top: none; margin-bottom: 32px; }
+    .q-row { display: flex; align-items: flex-start; padding: 10px 0; padding-left: 26px; border-bottom: 1px solid #f0f0f0; }
+    .q-row:last-child { border-bottom: none; }
+    .q-row__num { flex-shrink: 0; min-width: 1.5rem; text-align: right; padding-right: .5rem; padding-top: 1px; color: var(--grey-light); }
+    .q-row__text { flex: 1; line-height: 1.4; padding-right: 8px; }
+    .q-row__text.trap { color: var(--trap); font-style: italic; }
+    .q-row__inputs { display: flex; width: 197px; flex-shrink: 0; justify-content: space-around; align-items: flex-start; padding-top: 2px; }
+
+    input[type="radio"] { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; min-width: 14px; border: 1.5px solid #000; border-radius: 50%; cursor: pointer; transition: border-color .15s, background-color .15s; }
+    input[type="radio"]:hover { border-color: var(--red); }
+    input[type="radio"]:checked { border-color: var(--red); background-color: var(--red); box-shadow: inset 0 0 0 3px #fff; }
+
+    .sr-section { padding: 0 var(--pad-r) 16px var(--pad-l); }
+    .sr__h2 { font-size: 18px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+    .sr__divider { border: none; border-top: 1px dashed #000; margin: 0 0 28px; }
+    .sr__question { margin-bottom: 24px; }
+    .sr__label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .sr__textarea { width: 100%; min-height: 80px; border: 1.5px solid #c8d4ea; padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px; resize: vertical; outline: none; }
+    .sr__textarea:focus { border-color: var(--grey-dark); }
+
+    .actions { padding: 24px var(--pad-r) 16px var(--pad-l); display: flex; gap: 12px; }
+    .btn { height: 34px; min-width: 165px; padding: 0 12px; font-size: 11px; font-weight: 400; color: #fff; border: none; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; }
+    .btn--passive { background: var(--red); transition: background .2s; }
+    .btn--passive:hover { background: var(--grey-dark); }
+    .btn--active { background: var(--grey-dark); transition: background .2s; }
+    .btn--active:hover { background: var(--red); }
+    .btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
+    /* THANK YOU */
+    .thankyou { display: none; text-align: center; padding: 80px 40px; }
+    .thankyou.show { display: block; }
+    .thankyou__icon { font-size: 64px; margin-bottom: 24px; }
+    .thankyou__h1 { font-family: 'PT Serif', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px; }
+    .thankyou__p { font-size: 14px; color: var(--trap); line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+    /* ERROR */
+    .error-page { text-align: center; padding: 80px 40px; }
+    .error-page h1 { font-family: 'PT Serif', serif; font-size: 24px; margin-bottom: 12px; }
+    .error-page p { color: var(--trap); font-size: 13px; line-height: 1.6; }
+
+    /* PROGRESS INDICATOR */
+    .q-progress { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--grey-light); z-index: 10; padding: 8px var(--pad-l); display: flex; align-items: center; gap: 12px; }
+    .q-progress__bar { flex: 1; height: 3px; background: var(--grey-light); }
+    .q-progress__fill { height: 100%; background: var(--teal); transition: width .3s; }
+    .q-progress__label { font-size: 11px; color: var(--trap); white-space: nowrap; }
+
+    @media (max-width: 768px) {
+      :root { --pad-l: 0; --pad-r: 0; }
+      .nav__inner { height: auto; padding: 16px; }
+      .nav__logo svg { height: 50px; }
+      .intro { padding: 24px 16px 0; }
+      .scale-legend { margin-left: 16px; max-width: calc(100% - 32px); }
+      .q-section { flex-direction: column; padding: 0 16px 40px; }
+      .q-section__icon { width: 60px; }
+      .q-section__body { margin-left: 0; margin-top: 16px; width: 100%; }
+      .q-subsection__hdr { flex-wrap: wrap; }
+      .q-subsection__indent { display: none; }
+      .q-subsection__name { flex: 1 1 100%; }
+      .rating-hdr { flex: none; width: 100%; padding-left: 26px; }
+      .q-row { flex-wrap: wrap; padding-left: 0; }
+      .q-row__text { flex: 1 1 calc(100% - 26px); margin-bottom: 8px; }
+      .q-row__inputs { flex: none; width: 100%; padding-left: 26px; }
+      .sr-section { padding: 0 16px 40px; }
+      .actions { padding: 16px 16px 40px; }
+      .q-progress { padding: 8px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 75" fill="none" height="75">
+        <text x="0" y="52" font-family="PT Serif, serif" font-size="48" fill="#000" font-weight="400">Universität</text>
+        <text x="0" y="68" font-family="Inter, sans-serif" font-size="11" fill="#000" font-weight="700" letter-spacing="2">BASEL</text>
+      </svg>
+    </div>
+  </div>
+</nav>
+
+<!-- ERROR STATE -->
+<div class="error-page" id="error-page" style="display:none">
+  <h1>Link ungültig oder abgelaufen</h1>
+  <p>Dieser Feedback-Link konnte nicht gefunden werden.<br>Bitte wenden Sie sich an die Person, die Ihnen diesen Link zugeschickt hat.</p>
+</div>
+
+<!-- ALREADY SUBMITTED -->
+<div class="error-page" id="already-done" style="display:none">
+  <h1>Feedback bereits eingereicht</h1>
+  <p>Sie haben für diesen Feedbackprozess bereits eine Rückmeldung abgegeben.<br>Vielen Dank für Ihre Teilnahme.</p>
+</div>
+
+<!-- MAIN QUESTIONNAIRE -->
+<div id="main-content" style="display:none">
+  <div class="q-progress">
+    <div class="q-progress__bar"><div class="q-progress__fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="q-progress__label" id="prog-label">0 von 0 beantwortet</div>
+  </div>
+
+  <div class="page">
+    <div class="intro">
+      <h1 class="intro__title">Fremdeinschätzung Leadership-Kompetenzen</h1>
+      <div class="intro__person" id="person-box"></div>
+      <div class="intro__body">
+        <p>Sie wurden eingeladen, eine Führungsperson im Rahmen des 360°-Führungsfeedbacks der Universität Basel zu bewerten. Ihre Angaben sind <strong>anonym</strong> – individuelle Rückmeldungen werden nicht an die bewertete Person weitergegeben. Auswertungen erfolgen nur bei mindestens 3 ausgefüllten Fremdbild-Fragebögen.</p>
+        <p>Bitte beurteilen Sie jede Aussage auf einer Skala von 1 (trifft gar nicht zu) bis 5 (trifft voll und ganz zu) bezogen auf Ihre Beobachtungen dieser Führungsperson.</p>
+      </div>
+    </div>
+
+    <div class="scale-legend">
+      <div class="scale-legend__heading">Auswahlmöglichkeiten</div>
+      <div class="scale-legend__grid">
+        <div class="scale-legend__col"><span class="scale-legend__sym">1</span><span class="scale-legend__lbl">Trifft gar nicht zu</span></div>
+        <div class="scale-legend__col"><span class="scale-legend__sym">2</span><span class="scale-legend__lbl">Trifft eher nicht zu</span></div>
+        <div class="scale-legend__col"><span class="scale-legend__sym">3</span><span class="scale-legend__lbl">Trifft teils/teils zu</span></div>
+        <div class="scale-legend__col"><span class="scale-legend__sym">4</span><span class="scale-legend__lbl">Trifft ziemlich zu</span></div>
+        <div class="scale-legend__col"><span class="scale-legend__sym">5</span><span class="scale-legend__lbl">Trifft voll und ganz zu</span></div>
+      </div>
+    </div>
+
+    <div id="form-root"></div>
+
+    <!-- OPEN QUESTIONS -->
+    <div class="sr-section" style="margin-top:2rem;">
+      <h2 class="sr__h2">Offene Fragen</h2>
+      <hr class="sr__divider">
+      <div id="open-questions-root"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--passive" id="btn-reset" onclick="resetForm()">Zurücksetzen</button>
+      <button class="btn btn--active" id="btn-submit" onclick="submitFeedback()" disabled>Feedback einreichen</button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU -->
+<div class="thankyou" id="thankyou">
+  <div class="thankyou__icon">✓</div>
+  <h1 class="thankyou__h1">Vielen Dank für Ihr Feedback!</h1>
+  <p class="thankyou__p">Ihre Rückmeldung wurde erfolgreich übermittelt und wird gemeinsam mit den Einschätzungen der anderen Feedbackgebenden ausgewertet. Dabei ist Ihre Anonymität zu jeder Zeit gewährleistet.</p>
+</div>
+
+<script src="cmt-data.js"></script>
+<script>
+const ICONS = [
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#d21039" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="M51.52 87.56c20.6 0 37.3-16.7 37.3-37.3s-16.7-37.3-37.3-37.3-37.3 16.7-37.3 37.3 16.7 37.3 37.3 37.3Z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="M45.73 45.26 36.51 62.5l17.27-9.17.03-.03 9.16-17.27z"/><path fill="#1d1d1b" d="m45.73 45.26 17.24-9.23-9.16 17.27z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m53.79 53.32-8.06-8.06M49.74 23.19v8.58m0 36.99v8.58M22.67 50.27h8.58m36.98 0h8.58"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#bebec8" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="m71.6 108.06-8.95-62.99h3.33V34.23h-2.11v-4.52h3.44L52.63 14.28 37.97 29.71h3.44v4.52h-2.1v10.84h3.32l-8.95 62.99z"/><path stroke="#1d1d1b" d="M33.76 91.89h33.3M36.34 74.93h27.72M38.77 57.96h23.46M39.15 34.23h22.61m-22.58-4.52h22.61M40.15 45.06h20.49"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#006f6f" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><circle cx="50" cy="50" r="28" stroke="#fff" stroke-width="2" fill="none"/><path d="M50 22v8M50 70v8M22 50h8M70 50h8" stroke="#fff" stroke-width="2"/><circle cx="50" cy="50" r="6" fill="#fff"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#eb829b" d="M50.06 100.05c27.614 0 50-22.386 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="m63.417 39.99-1.922-1.37a4.85 4.85 0 0 1-1.132-6.765l12.874-18.049 9.81 6.998-12.874 18.049a4.85 4.85 0 0 1-6.765 1.132zM19.78 21.257l9.81-6.998 12.874 18.05a4.85 4.85 0 0 1-1.132 6.764l-1.921 1.37a4.85 4.85 0 0 1-6.765-1.132L19.772 21.263z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m26.14 87.63 40.3-56.51M72.54 87.63 32.23 31.12"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#1EA5A5" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><rect x="20" y="30" width="60" height="40" rx="2" stroke="#fff" stroke-width="2" fill="none"/><path d="M30 42h40M30 50h40M30 58h24" stroke="#fff" stroke-width="2"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`
+];
+
+const params   = new URLSearchParams(window.location.search);
+const TOKEN    = params.get('token');
+const CASE_ID  = params.get('case');
+let caseData   = null;
+let respondent = null;
+let answers    = {};
+let openAnswers = {};
+let totalQ = 0;
+
+// ── INIT ──────────────────────────────────────────────────────
+function init() {
+  if (!TOKEN || !CASE_ID) { showError(); return; }
+  caseData   = CMT.getCase(CASE_ID);
+  if (!caseData) { showError(); return; }
+  respondent = caseData.respondents.find(r => r.token === TOKEN);
+  if (!respondent) { showError(); return; }
+  if (respondent.submitted) { document.getElementById('already-done').style.display = 'block'; return; }
+
+  // Show person box
+  document.getElementById('person-box').innerHTML =
+    `<strong>${esc(caseData.name)}</strong>${caseData.role ? caseData.role : ''}${caseData.unit ? ' · ' + caseData.unit : ''}`;
+
+  document.getElementById('main-content').style.display = 'block';
+  renderForm();
+  renderOpenQuestions();
+}
+
+function showError() {
+  document.getElementById('error-page').style.display = 'block';
+}
+
+// ── RENDER FORM ───────────────────────────────────────────────
+function renderForm() {
+  const COLORS = ['--col-1','--col-2','--col-3','--col-4','--col-5'];
+  let qNum = 0;
+  totalQ = 0;
+  CMT.sections.forEach(s => s.subsections.forEach(ss => totalQ += ss.questions.length));
+
+  document.getElementById('form-root').innerHTML = CMT.sections.map((section, si) => {
+    const color = `var(${COLORS[si]})`;
+    let localQ = 0;
+    const subsHtml = section.subsections.map(ss => {
+      const isTrap = ss.trap;
+      const hdr = `
+        <div class="q-subsection__hdr">
+          <div class="q-subsection__indent"></div>
+          <div class="q-subsection__name${isTrap?' trap':''}">${esc(ss.de)}</div>
+          <div class="rating-hdr"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        </div>`;
+      const rows = ss.questions.map(q => {
+        localQ++; qNum++;
+        const text = CMT.toFremd(q.de);
+        return `
+          <div class="q-row">
+            <div class="q-row__num">${localQ}</div>
+            <div class="q-row__text${isTrap?' trap':''}">${esc(text)}</div>
+            <div class="q-row__inputs">
+              ${[1,2,3,4,5].map(v =>
+                `<input type="radio" name="${q.id}" value="${v}" onchange="onAnswer('${q.id}',${v})">`
+              ).join('')}
+            </div>
+          </div>`;
+      }).join('');
+      return `<div class="q-subsection${isTrap?' trap':''}">${hdr}<div class="q-list">${rows}</div></div>`;
+    }).join('');
+
+    return `
+      <section class="q-section" style="--border-color:${color}">
+        <div class="q-section__icon">${ICONS[si]}</div>
+        <div class="q-section__body">
+          <div class="q-section__head" style="--border-color:${color}">
+            <div class="q-section__num">${si+1}</div>
+            <h2 class="q-section__title">${esc(section.de)}</h2>
+          </div>
+          ${subsHtml}
+        </div>
+      </section>`;
+  }).join('');
+}
+
+function renderOpenQuestions() {
+  document.getElementById('open-questions-root').innerHTML =
+    CMT.fremdReflection.map(q => `
+      <div class="sr__question">
+        <label class="sr__label" for="${q.id}">${esc(q.de)}</label>
+        <textarea class="sr__textarea" id="${q.id}" name="${q.id}" rows="4"
+          oninput="openAnswers['${q.id}']=this.value" placeholder="Ihre Antwort (freiwillig) …"></textarea>
+      </div>`).join('');
+}
+
+// ── ANSWERS ───────────────────────────────────────────────────
+function onAnswer(qId, val) {
+  answers[qId] = val;
+  updateProgress();
+  checkReady();
+}
+
+function updateProgress() {
+  const done = Object.keys(answers).length;
+  const pct  = totalQ ? Math.round(done / totalQ * 100) : 0;
+  document.getElementById('prog-fill').style.width  = pct + '%';
+  document.getElementById('prog-label').textContent = `${done} von ${totalQ} beantwortet`;
+}
+
+function checkReady() {
+  const done = Object.keys(answers).length;
+  document.getElementById('btn-submit').disabled = done < totalQ;
+}
+
+function resetForm() {
+  if (!confirm('Alle Eingaben zurücksetzen?')) return;
+  answers = {};
+  openAnswers = {};
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.sr__textarea').forEach(t => t.value = '');
+  updateProgress();
+  checkReady();
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────
+function submitFeedback() {
+  const totalAnswered = Object.keys(answers).length;
+  if (totalAnswered < totalQ) {
+    alert(`Bitte beantworten Sie alle ${totalQ} Fragen bevor Sie einreichen.`);
+    return;
+  }
+  if (!confirm('Möchten Sie Ihr Feedback jetzt einreichen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
+
+  // Save to localStorage under the case
+  const c = CMT.getCase(CASE_ID);
+  const resp = c.respondents.find(r => r.token === TOKEN);
+  resp.submitted   = true;
+  resp.submittedAt = new Date().toISOString();
+  resp.answers     = { ...answers };
+  resp.openAnswers = { ...openAnswers };
+  CMT.saveCase(c);
+
+  // Show thank you
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('thankyou').classList.add('show');
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+init();
+</script>
+</body>
+</html>
