@@ -452,7 +452,7 @@ function renderRespondents(c){
   if(!c.respondents.length) return '<div style="font-size:11px;color:var(--grey);grid-column:1/-1;padding:8px 0">Noch keine Feedbackgeber/innen hinzugefügt.</div>';
   const base=getBase();
   return c.respondents.map(r=>{
-    const link=`${base}/fremdbild.html?token=${r.token}&case=${c.id}`;
+    const link=`${base}/fremdbild-form.html?token=${r.token}&case=${c.id}`;
     return `<div class="resp-item">
       <span class="self-dot ${r.submitted?'dot-green':'dot-grey'}"></span>
       <span class="resp-item__email">${esc(r.email)}</span>
@@ -516,7 +516,7 @@ async function addRespondent(caseId){
   setTimeout(()=>{
     document.getElementById(`resp-row-${caseId}`)?.classList.add('open');
     if(confirm(`${email} hinzugefügt.\n\nEinladungs-E-Mail jetzt öffnen?`)){
-      const link=`${getBase()}/fremdbild.html?token=${newR.token}&case=${caseId}`;
+      const link=`${getBase()}/fremdbild-form.html?token=${newR.token}&case=${caseId}`;
       sendFremdbildMail(email, link, c.name);
     }
   }, 300);

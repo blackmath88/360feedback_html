@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fremdbild-Fragebogen | 360° Leadership Feedback</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=PT+Serif&display=swap" rel="stylesheet">
+  <style>
+    /* ── DESIGN TOKENS ──────────────────────────────────── */
+    :root {
+      --red:        #d20537;
+      --trap:       #5D666D;
+      --teal:       #a5d7d2;
+      --grey-light: #d0d0d0;
+      --grey-dark:  #222;
+      --hellrot:    #eb829b;
+
+      --col-competence-1: #d21039;
+      --col-competence-2: #bebec8;
+      --col-competence-3: #006f6f;
+      --col-competence-4: #eb829b;
+      --col-competence-5: #1EA5A5;
+
+      --max-w:  1280px;
+      --pad-l:   284px;
+      --pad-r:   282px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      background: #fff;
+      color: #000;
+    }
+
+    /* ── NAV ────────────────────────────────────────────── */
+    .nav { background: var(--teal); }
+
+    .nav__inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      height: 181px;
+      display: flex;
+      align-items: center;
+      padding: 0 49px;
+    }
+
+    .nav__logo svg {
+      display: block;
+      height: 75px;
+    }
+    #logo-de { width: 236px; }
+
+    /* ── PAGE WRAPPER ───────────────────────────────────── */
+    .page { max-width: var(--max-w); margin: 0 auto; padding-bottom: 4rem; }
+
+    /* ── INTRO ──────────────────────────────────────────── */
+    .intro { padding: 39px 0 0 0; margin-left: var(--pad-l); margin-right: var(--pad-r); }
+
+    .intro__title {
+      font-family: 'PT Serif', serif;
+      font-size: 25px;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .intro__body { line-height: 1.6; }
+    .intro__body p + p { margin-top: 0.75em; }
+
+    /* ── SCALE LEGEND ───────────────────────────────────── */
+    .scale-legend {
+      margin: 32px 0 52px var(--pad-l);
+      max-width: 563px;
+    }
+
+    .scale-legend__heading {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .scale-legend__grid { display: flex; }
+
+    .scale-legend__col {
+      flex: 1;
+      border-left: 1px solid var(--grey-light);
+      padding: 6px 4px 6px 8px;
+      text-align: center;
+    }
+
+    .scale-legend__col:last-child { border-right: 1px solid var(--grey-light); }
+
+    .scale-legend__sym {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .scale-legend__lbl { display: block; }
+
+    /* ── QUESTION SECTIONS ──────────────────────────────── */
+    .q-section {
+      display: flex;
+      align-items: flex-start;
+      padding: 3rem var(--pad-r) 56px 142px;
+    }
+
+    .q-section__icon { width: 100px; flex-shrink: 0; }
+
+    .q-section__body { flex: 1; margin-left: 39px; }
+
+    .q-section__head {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .q-section__num {
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--red);
+      line-height: 1;
+      margin-right: 16px;
+    }
+
+    .q-section__title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      padding: 10px;
+    }
+
+    /* ── SUB-SECTION ────────────────────────────────────── */
+    .q-subsection { --border-color: var(--grey-light); }
+
+    .q-subsection__hdr {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-left: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+    }
+
+    .q-subsection__indent { width: 26px; flex-shrink: 0; }
+
+    .q-subsection__name {
+      font-size: 14px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .rating-hdr {
+      display: flex;
+      width: 197px;
+      flex-shrink: 0;
+      justify-content: space-around;
+    }
+
+    .rating-hdr span { font-size: 14px; text-align: center; min-width: 24px; }
+
+    /* ── QUESTION ROWS ──────────────────────────────────── */
+    .q-list {
+      border: 1px solid var(--border-color);
+      border-top: none;
+      margin-bottom: 32px;
+    }
+
+    .q-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 0;
+      padding-left: 26px;
+    }
+
+    .q-row + .q-row { border-top: 1px solid #f0f0f0; }
+
+    .q-row__num {
+      flex-shrink: 0;
+      min-width: 1.5rem;
+      text-align: right;
+      padding-right: 0.5rem;
+      padding-top: 1px;
+    }
+
+    .q-row__text {
+      flex: 1;
+      line-height: 1.4;
+      padding-right: 8px;
+    }
+
+    .q-row__inputs {
+      display: flex;
+      width: 197px;
+      flex-shrink: 0;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding-top: 2px;
+    }
+
+    input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      min-width: 14px;
+      border: 1.5px solid #000;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: border-color 0.15s, background-color 0.15s;
+    }
+
+    input[type="radio"]:hover { border-color: var(--red); }
+
+    input[type="radio"]:checked {
+      border-color: var(--red);
+      background-color: var(--red);
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+
+    /* ── OPEN QUESTIONS (Fremdreflexion) ────────────────── */
+    .fr-section {
+      padding: 0 var(--pad-r) 16px var(--pad-l);
+    }
+
+    .fr__h2 {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .fr__divider {
+      border: none;
+      border-top: 1px dashed #000;
+      margin: 0 0 28px;
+    }
+
+    .fr__question { margin-bottom: 24px; }
+
+    .fr__label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .fr__textarea {
+      display: block;
+      width: 100%;
+      height: 130px;
+      background: rgba(217, 217, 217, 0.3);
+      border: none;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.6;
+      resize: none;
+    }
+
+    .fr__textarea::placeholder { color: rgba(0, 0, 0, 0.25); }
+
+    /* ── ACTIONS ────────────────────────────────────────── */
+    .actions {
+      padding: 24px var(--pad-r) 16px var(--pad-l);
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      height: 34px;
+      min-width: 165px;
+      padding: 0 12px;
+      font-size: 11px;
+      font-weight: 400;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn--active        { background: var(--grey-dark); transition: background 0.2s; }
+    .btn--active:hover  { background: var(--red); }
+    .btn--active:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── VALIDATION MESSAGE ─────────────────────────────── */
+    .validation-msg {
+      display: none;
+      color: var(--red);
+      font-size: 12px;
+      padding: 8px 0 0;
+      align-self: center;
+    }
+
+    .validation-msg.visible { display: block; }
+
+    /* ── STATUS SCREENS ─────────────────────────────────── */
+    .status-screen {
+      display: none;
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .status-screen.visible { display: block; }
+
+    .status-screen__icon {
+      font-size: 48px;
+      margin-bottom: 24px;
+    }
+
+    .status-screen__title {
+      font-family: 'PT Serif', serif;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .status-screen__body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    /* ── LOADING OVERLAY ────────────────────────────────── */
+    #loading-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    #loading-screen.hidden { display: none; }
+
+    /* ── FORM WRAPPER ───────────────────────────────────── */
+    #form-wrapper { display: none; }
+    #form-wrapper.visible { display: block; }
+
+    /* ── PROGRESS BAR ───────────────────────────────────── */
+    .progress-bar-wrap {
+      background: var(--grey-light);
+      height: 4px;
+      width: 100%;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--teal);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav__inner { height: 72px; padding: 0 16px; }
+      .nav__logo svg { height: 48px; width: auto; }
+
+      :root {
+        --pad-l: 16px;
+        --pad-r: 16px;
+      }
+
+      .q-section {
+        padding: 2rem 16px 32px 16px;
+        flex-direction: column;
+      }
+
+      .q-section__icon { display: none; }
+      .q-section__body { margin-left: 0; width: 100%; }
+
+      .rating-hdr { width: 150px; }
+      .q-row__inputs { width: 150px; }
+
+      .intro { margin-left: 16px; margin-right: 16px; }
+      .scale-legend { margin-left: 16px; }
+      .fr-section { padding: 0 16px 40px; }
+      .actions { padding: 16px 16px 40px; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAAAAABWESUoAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+oDHgsPC5By4p4AAAI9SURBVDjLhZNBT+JAFMffm2li4rTb7KV0MCTuUizhyEm/wAro11Vg7yaeyO6lsUKiFyntYaW2Y2LCzNtDixAP2tM/zS//5v1eHxJ8/ljvSWXgiQ8JANg7kE6n6cdUN5QrlIdQxHBWvavSa0K+XTWsxuMMABnDCqhSNh6v6gbEIuZNixO+JTm4EhlaehkXDtaAvIxnD5ecEc+mEfRGnCFPrp77oVcDh8f8Qc1VaTPGOXDGsJwL9b3X2o3ZvJz/vU9D9Adn4PolS65P+h1ZT6HSAi2u7mNLLYAYlIuFKtcQqHhDTkMgPUxjxlmZlNY3TxgCZCp72djSNtqE5z+qTxDZocpe/tnSgWKLVktAUmmByBkuft9twlEX7q5jq/srIKOJnIawQPwEeMuYDzd2I3QR3BBSEQQr4x3spkimfEBGDtw/V3DUb08MJRN9frxbVh5FOZHTbT7d3j41uw5RHkX5h21++j+4Pe6WWNy5R6dwtMwLG92edvcAOWL+giXXYX8Ey1mchiiHxtsziZyVC1WuoS0hjyunZk07k4xt/e2JMmZnEnGr2sDWqY17Ji0+r/0RYO20ozc7kzoRJ5CKIEhycCXc2I0TISTfTbG8Uv1gYmg1iaA3JCMHYhZftLaiXh+jZ9Hp2GSM1lobQ3anI56jx9e6IRkX/Z6MDWnv/BRcb21Qy4toNh+2K4DICVuw0UAHxwAAZGDDW3pOVDf4Q/QAyEB9p1XyhuTXgB0AADghOBVQpcN27eGL48Wvzv8/55I4kktugQcAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMDMtMzBUMTE6MTU6MDgrMDA6MDDacINPAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTAzLTMwVDExOjE1OjA4KzAwOjAwqy078wAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNi0wMy0zMFQxMToxNToxMSswMDowMKUKX2EAAAAASUVORK5CYII=">
+</head>
+<body>
+
+  <!-- ── NAVIGATION ─────────────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <div class="nav__logo">
+        <svg id="logo-de" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 236 75" width="236" height="75" aria-label="360° Leadership Feedback"><path d="M40.145 63.121c-.675-.657-1.688.336-1.014.99l4.86 4.752 1.013-.99zm-7.851 5.744-1.014-.991 4.86-4.752c.674-.655 1.687.337 1.013.994zm-20.566-33.52c.669.657-.343 1.648-1.016.99l-4.859-4.753 1.016-.99zm-5.871 7.678 1.014.993 4.859-4.752c.673-.659-.343-1.651-1.014-.995zm30.288-31.56c.674.656 1.687-.335 1.016-.994L32.3 5.72l-1.016.992c.001-.001 4.283 4.186 4.861 4.75m7.839-5.743L45 6.71l-4.859 4.753c-.674.656-1.687-.335-1.016-.994.58-.563 4.859-4.749 4.859-4.749m20.57 29.615c-.672.657.341 1.649 1.015.989l4.86-4.75-1.015-.991zm5.878 7.675-1.013.989-4.86-4.75c-.672-.658.34-1.649 1.014-.992.579.563 4.86 4.753 4.86 4.753m-46.44-20.534c.672.658-.341 1.649-1.014.99L5.856 6.727l1.013-.992zM69.418 5.727l1.013.994L53.31 23.464c-.673.657-1.686-.336-1.016-.994.58-.564 17.125-16.743 17.125-16.743M22.978 51.13c.67-.656 1.686.334 1.013.992L6.87 68.863l-1.016-.99s16.544-16.18 17.125-16.744m47.454 16.736-1.013.994-17.125-16.742c-.67-.658.342-1.651 1.016-.993.578.563 17.122 16.741 17.122 16.741M23.905 47.241c.67.66-.343 1.648-1.016.991l-9.272-9.066c-.673-.657.342-1.649 1.013-.991 0 0 8.694 8.503 9.275 9.066m16.238-33.845c-.674-.655-1.687.334-1.016.994.673.656 9.272 9.063 9.272 9.063.673.66 1.687-.333 1.016-.99zm9.272 33.93c.67.656-.342 1.649-1.016.992l-9.272-9.067c-.67-.657.342-1.648 1.016-.991 0 0 8.691 8.502 9.272 9.066m13.17-8.075c.673-.657-.342-1.648-1.015-.994-.671.658-9.273 9.07-9.273 9.07-.67.655.343 1.648 1.016.991zM27.883 23.453c-.675.66-1.688-.333-1.016-.99l9.273-9.067c.672-.658 1.688.332 1.014.991 0 0-8.695 8.5-9.271 9.066m9.272 15.798c.673-.657-.342-1.648-1.014-.994l-9.273 9.07c-.672.655.341 1.648 1.016.991.575-.567 9.27-9.067 9.27-9.067M23.998 27.267c.67-.657-.343-1.65-1.013-.994L13.71 35.34c-.672.659.343 1.649 1.015.992 0 .001 8.692-8.5 9.273-9.065m16.145 33.928c-.674.657-1.687-.336-1.013-.994l9.272-9.066c.671-.657 1.686.336 1.014.991-.58.57-9.273 9.07-9.273 9.07m9.272-33.928c.672-.657-.342-1.65-1.014-.994 0 0-8.602 8.41-9.272 9.067-.673.659.339 1.649 1.013.992.001.001 8.695-8.5 9.273-9.065m13.17 8.077c.673.658-.342 1.65-1.015.992-.671-.66-9.273-9.069-9.273-9.069-.67-.657.343-1.648 1.016-.991zM27.883 51.14c-.675-.659-1.688.334-1.016.99 0 0 8.6 8.41 9.273 9.066.672.657 1.688-.332 1.014-.99 0 0-8.695-8.5-9.271-9.066m9.272-15.795c.673.658-.342 1.65-1.014.992-.672-.66-9.273-9.069-9.273-9.069-.672-.657.341-1.648 1.016-.991.575.567 9.27 9.068 9.27 9.068M0 49.025v1.403h22.68c.95 0 .95-1.403 0-1.403zm76.285 0v1.403H53.604c-.951 0-.951-1.403 0-1.403zM0 24.162v1.402h22.68c.95 0 .95-1.402 0-1.402zm76.285 0v1.402H53.604c-.951 0-.951-1.402 0-1.402zM28.174 49.025c-.95 0-.95 1.403 0 1.403h19.934c.951 0 .951-1.403 0-1.403zm19.934-24.863c.951 0 .951 1.402 0 1.402H28.174c-.95 0-.95-1.402 0-1.402zm2.031 50.429h1.433V52.415c0-.933-1.433-.933-1.433 0zM50.14 0h1.433v22.18c0 .927-1.433.927-1.433 0zm0 47.04c0 .93 1.433.93 1.433 0V27.55c0-.93-1.433-.93-1.433 0zm-25.428 5.375c0-.933 1.433-.933 1.433 0v22.176h-1.433zm0-30.236c0 .928 1.433.928 1.433 0V0h-1.433zm0 5.372c0-.928 1.433-.928 1.433 0v19.49c0 .93-1.433.93-1.433 0z"/></svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── PROGRESS BAR ───────────────────────────────────── -->
+  <div class="progress-bar-wrap" id="progress-bar-wrap" style="display:none">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <div class="page">
+
+    <!-- ── LOADING ─────────────────────────────────────── -->
+    <div id="loading-screen">Einen Moment, bitte…</div>
+
+    <!-- ── ERROR ───────────────────────────────────────── -->
+    <div class="status-screen" id="error-screen">
+      <div class="status-screen__icon">⚠️</div>
+      <h1 class="status-screen__title">Link ungültig oder abgelaufen</h1>
+      <p class="status-screen__body" id="error-msg">
+        Dieser Link ist nicht mehr gültig. Bitte wenden Sie sich an die Person, die Sie zur Feedbackabgabe eingeladen hat.
+      </p>
+    </div>
+
+    <!-- ── ALREADY SUBMITTED ────────────────────────────── -->
+    <div class="status-screen" id="submitted-screen">
+      <div class="status-screen__icon">✅</div>
+      <h1 class="status-screen__title">Feedback bereits eingereicht</h1>
+      <p class="status-screen__body">
+        Sie haben für diese Führungsperson bereits Feedback eingereicht. Vielen Dank für Ihre Teilnahme.
+      </p>
+    </div>
+
+    <!-- ── SUCCESS ──────────────────────────────────────── -->
+    <div class="status-screen" id="success-screen">
+      <div class="status-screen__icon">🎉</div>
+      <h1 class="status-screen__title">Herzlichen Dank für Ihr Feedback!</h1>
+      <p class="status-screen__body">
+        Ihre Antworten wurden erfolgreich übermittelt. Ihr Beitrag hilft der Führungsperson, ihre Wirkung besser zu verstehen und sich weiterzuentwickeln.
+      </p>
+    </div>
+
+    <!-- ── FORM ─────────────────────────────────────────── -->
+    <div id="form-wrapper">
+
+      <div class="intro">
+        <h1 class="intro__title">Führungsfeedback – Fremdbeurteilung</h1>
+        <div class="intro__body">
+          <p>Sie wurden gebeten, für <strong id="leader-name">diese Führungsperson</strong> ein Feedback zu geben. Der Fragebogen umfasst zentrale Aspekte wirksamer Führung. Bitte beurteilen Sie das Verhalten der Führungsperson anhand der nachfolgenden Aussagen auf einer Skala von 1 (trifft gar nicht zu) bis 5 (trifft voll und ganz zu).</p>
+          <p>Ihre Antworten werden vertraulich behandelt und nur in aggregierter Form (zusammen mit anderen Feedbackgebenden) ausgewertet.</p>
+        </div>
+      </div>
+
+      <!-- ── SCALE LEGEND ───────────────────────────────── -->
+      <div class="scale-legend">
+        <div class="scale-legend__heading">Bewertungsskala</div>
+        <div class="scale-legend__grid">
+          <div class="scale-legend__col">
+            <span class="scale-legend__sym">1</span>
+            <span class="scale-legend__lbl">Trifft gar nicht zu</span>
+          </div>
+          <div class="scale-legend__col">
+            <span class="scale-legend__sym">2</span>
+            <span class="scale-legend__lbl">Trifft eher nicht zu</span>
+          </div>
+          <div class="scale-legend__col">
+            <span class="scale-legend__sym">3</span>
+            <span class="scale-legend__lbl">Teils / teils</span>
+          </div>
+          <div class="scale-legend__col">
+            <span class="scale-legend__sym">4</span>
+            <span class="scale-legend__lbl">Trifft eher zu</span>
+          </div>
+          <div class="scale-legend__col">
+            <span class="scale-legend__sym">5</span>
+            <span class="scale-legend__lbl">Trifft voll und ganz zu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── QUESTION SECTIONS (rendered by JS) ────────── -->
+      <div id="form-root"></div>
+
+      <!-- ── OPEN QUESTIONS (rendered by JS) ───────────── -->
+      <div id="open-root"></div>
+
+      <!-- ── ACTIONS ────────────────────────────────────── -->
+      <div class="actions">
+        <button class="btn btn--active" id="btn-submit"
+                type="button" onclick="submitForm()" disabled>
+          Feedback einreichen
+        </button>
+        <span class="validation-msg" id="validation-msg">
+          Bitte beantworten Sie alle Fragen, bevor Sie das Formular einreichen.
+        </span>
+      </div>
+
+    </div><!-- /#form-wrapper -->
+  </div><!-- /.page -->
+
+  <script src="cmt-data.js"></script>
+  <script>
+    'use strict';
+
+    // ── URL PARAMS ───────────────────────────────────────────────
+    const params  = new URLSearchParams(location.search);
+    const token   = params.get('token');
+    const caseId  = params.get('case');
+
+    // ── ICONS (matching CMT.sections order) ──────────────────────
+    // CMT.sections: [vorbildfunktion, orientierung, steuern, entwickeln, arbeitsumfeld]
+    // Colors:        [#d21039,         #bebec8,      #006f6f,  #eb829b,    #1EA5A5]
+    const ICONS = [
+      // 0 – Führung als Vorbild (#d21039)
+      () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#d21039" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="M51.52 87.56c20.6 0 37.3-16.7 37.3-37.3s-16.7-37.3-37.3-37.3-37.3 16.7-37.3 37.3 16.7 37.3 37.3 37.3Z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="M45.73 45.26 36.51 62.5l17.27-9.17.03-.03 9.16-17.27z"/><path fill="#1d1d1b" d="m45.73 45.26 17.24-9.23-9.16 17.27z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m53.79 53.32-8.06-8.06M49.74 23.19v8.58m0 36.99v8.58M22.67 50.27h8.58m36.98 0h8.58m4.94-.01c0 17.68-14.33 32.01-32.01 32.01S17.73 67.94 17.73 50.26s14.33-32.01 32.01-32.01 32.01 14.33 32.01 32.01Zm-32.01-37.3c-20.6 0-37.3 16.7-37.3 37.3s16.7 37.3 37.3 37.3 37.3-16.7 37.3-37.3-16.7-37.3-37.3-37.3Z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+      // 1 – Orientierung schaffen (#bebec8)
+      () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#bebec8" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><mask id="b" width="100" height="100" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance"><path fill="#fff" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/></mask><g stroke-miterlimit="10" stroke-width="2" mask="url(#b)"><path fill="#fff" stroke="#fff" d="m71.6 108.06-8.95-62.99h3.33V34.23h-2.11v-4.52h3.44L52.63 14.28 37.97 29.71h3.44v4.52h-2.1v10.84h3.32l-8.95 62.99z"/><path stroke="#1d1d1b" d="M33.76 91.89h33.3M36.34 74.93h27.72M38.77 57.96h23.46M39.15 34.23h22.61m-22.58-4.52h22.61M40.15 45.06h20.49m-29.21 63 8.95-62.99h-3.33V34.23h2.11v-4.52h-3.44l14.66-15.43 14.68 15.43h-3.44v4.52h2.11v10.84H60.4l8.95 62.99z"/></g></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+      // 2 – Wirksam steuern (#006f6f)
+      () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#006f6f" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="4" d="M89.4 52.14v-4.53h-5.74c-.51-7.07-3.32-13.5-7.71-18.55l4.07-4.07-3.2-3.2-4.07 4.07a31.66 31.66 0 0 0-18.55-7.69v-5.76h-4.53v5.76c-7.07.5-13.5 3.31-18.55 7.69l-4.07-4.07-3.2 3.2 4.07 4.07a31.68 31.68 0 0 0-7.71 18.55h-5.74v4.53h5.73c.5 7.08 3.3 13.52 7.69 18.57l-4.05 4.05 3.2 3.2 4.05-4.05c5.05 4.39 11.49 7.2 18.57 7.71v5.72h4.53v-5.72c7.08-.5 13.52-3.32 18.57-7.71l4.05 4.05 3.2-3.2-4.05-4.05c4.38-5.06 7.19-11.49 7.69-18.57h5.75Zm-12.2-4.52H59.51c-.16-.52-.36-1.02-.62-1.49l12.5-12.5c3.23 3.86 5.33 8.69 5.81 13.98zm-9.02-17.18-12.5 12.5a7.7 7.7 0 0 0-1.48-.61V24.65a25.2 25.2 0 0 1 13.98 5.79Zm-18.5-5.8v17.68c-.52.16-1.01.36-1.48.61l-12.5-12.5a25.2 25.2 0 0 1 13.98-5.79Zm-17.19 9 12.49 12.49c-.26.47-.46.97-.62 1.49H26.68c.48-5.29 2.58-10.12 5.81-13.98Zm-5.81 18.5h17.67c.16.53.36 1.03.62 1.5l-12.5 12.5c-3.23-3.87-5.33-8.7-5.79-14Zm8.99 17.21 12.49-12.49c.48.26.98.47 1.51.63v17.68c-5.3-.47-10.14-2.57-14-5.81zm18.53 5.81V57.48a8 8 0 0 0 1.51-.63L68.2 69.34c-3.86 3.24-8.7 5.34-14 5.81zm17.2-9.01-12.5-12.5c.26-.48.46-.98.62-1.5h17.67a25.25 25.25 0 0 1-5.79 14Z"/><path fill="#1d1d1b" d="M52.37 12.47v5.76c7.07.5 13.5 3.31 18.55 7.69l4.07-4.07 3.2 3.2-4.07 4.07c4.39 5.05 7.2 11.48 7.71 18.55h5.74v4.53h-5.73c-.5 7.08-3.3 13.52-7.69 18.57l4.05 4.05-3.2 3.2-4.05-4.05a31.7 31.7 0 0 1-18.57 7.71v5.72h-4.53v-5.72c-7.08-.5-13.52-3.32-18.57-7.71l-4.05 4.05-3.2-3.2 4.05-4.05c-4.38-5.06-7.19-11.49-7.69-18.57h-5.73v-4.53h5.74c.51-7.07 3.32-13.5 7.71-18.55l-4.07-4.07 3.2-3.2 4.07 4.07a31.66 31.66 0 0 1 18.55-7.69v-5.76h4.53z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+      // 3 – Mitarbeitende und Teams entwickeln (#eb829b)
+      () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#eb829b" d="M50.06 100.05c27.614 0 50-22.386 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50"/><path fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="m63.417 39.99-1.922-1.37a4.85 4.85 0 0 1-1.132-6.765l12.874-18.049 9.81 6.998-12.874 18.049a4.85 4.85 0 0 1-6.765 1.132zM19.78 21.257l9.81-6.998 12.874 18.05a4.85 4.85 0 0 1-1.132 6.764l-1.921 1.37a4.85 4.85 0 0 1-6.765-1.132L19.772 21.263z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m26.14 87.63 40.3-56.51M26.14 87.63l40.3-56.51M61.313 40.27l-1.921-1.37a4.85 4.85 0 0 1-1.132-6.765l12.874-18.05 9.81 6.998-12.874 18.05a4.85 4.85 0 0 1-6.765 1.131zM72.54 87.63 32.23 31.12M72.54 87.63 32.23 31.12M17.73 21.083l9.81-6.998 12.875 18.05a4.85 4.85 0 0 1-1.133 6.764l-1.92 1.37a4.85 4.85 0 0 1-6.766-1.131l-12.874-18.05z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+      // 4 – Arbeitsumfeld gestalten (#1EA5A5)
+      () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none"><g clip-path="url(#a)"><path fill="#1ea5a5" d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50"/><path fill="#fff" d="M22.71 30.6v-8.8h-2.02c-3.04 0-5.57 2.36-5.57 5.3l-.02 43.96v-.03.02c0 2.63 2.21 4.77 4.93 4.77h68.01V30.6z"/><path stroke="#fff" stroke-miterlimit="10" stroke-width="2" d="M22.71 30.6v.09m0-.09v-8.8h-2.02c-3.04 0-5.57 2.36-5.57 5.3l-.02 43.96v-.03.02c0 2.63 2.21 4.77 4.93 4.77h68.01V30.6z"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="m13.27 70.99.02-43.96c0-2.94 2.53-5.3 5.57-5.3h2.02v44.48h-2.67c-2.72.01-4.93 2.15-4.93 4.78s2.21 4.77 4.93 4.77h-.04 68.05V30.52H20.88M38.69 60.81l-6.89 6.9M38.69 67.71l-6.89-6.9M64.83 44.15l6.9-6.89M71.73 44.15l-6.9-6.89M35.35 62.93v-1"/><path stroke="#1d1d1b" stroke-dasharray="2.02 2.02" stroke-miterlimit="10" stroke-width="2" d="M35.35 59.91v-1.93c0-3.76 2.69-6.81 6-6.81h20.81c3.31 0 6-3.05 6-6.81v-.61"/><path stroke="#1d1d1b" stroke-miterlimit="10" stroke-width="2" d="M68.17 42.73v-1M51.66 75.65S53.77 69 61.75 69s9.21-8.62 13.63-10.75c6.21-2.99 10.42 1.33 10.75 3.88M21.18 47.27c1.88.11 6.55-.9 9.09-2.88 3.55-2.77 5.54-6.21 10.64-6.87 8.03-1.05 8.42-6.87 8.42-6.87"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h100v100H0z"/></clipPath></defs></svg>`,
+    ];
+
+    // ── SHOW / HIDE HELPERS ──────────────────────────────────────
+    function showScreen(id) {
+      ['loading-screen', 'error-screen', 'submitted-screen', 'success-screen', 'form-wrapper']
+        .forEach(sid => {
+          const el = document.getElementById(sid);
+          if (el) el.classList.remove('visible', 'hidden');
+        });
+      document.getElementById('loading-screen').classList.add('hidden');
+      const target = document.getElementById(id);
+      if (target) target.classList.add('visible');
+    }
+
+    function showError(msg) {
+      if (msg) document.getElementById('error-msg').textContent = msg;
+      showScreen('error-screen');
+    }
+
+    // ── QUESTION COUNT ───────────────────────────────────────────
+    let totalQuestions = 0;
+    let answeredQuestions = 0;
+
+    // ── RENDER FORM ──────────────────────────────────────────────
+    function renderForm() {
+      const formRoot = document.getElementById('form-root');
+      if (!formRoot) return;
+
+      let globalQ = 0;
+      totalQuestions = 0;
+
+      formRoot.innerHTML = CMT.sections.map((section, si) => {
+        // Only non-trap subsections
+        const visibleSubsections = section.subsections.filter(ss => !ss.trap);
+
+        const subsectionsHtml = visibleSubsections.map(ss => {
+          const questionsHtml = ss.questions.map(q => {
+            totalQuestions++;
+            const qText = CMT.toFremd(q.de);
+            return `
+              <div class="q-row" role="listitem">
+                <span class="q-row__num" aria-hidden="true">${++globalQ}.</span>
+                <label class="q-row__text">${escHtml(qText)}</label>
+                <div class="q-row__inputs" role="radiogroup" aria-label="${escHtml(qText)}">
+                  <input type="radio" name="${q.id}" value="1" title="1" required>
+                  <input type="radio" name="${q.id}" value="2" title="2">
+                  <input type="radio" name="${q.id}" value="3" title="3">
+                  <input type="radio" name="${q.id}" value="4" title="4">
+                  <input type="radio" name="${q.id}" value="5" title="5">
+                </div>
+              </div>`;
+          }).join('');
+
+          return `
+            <div class="q-subsection">
+              <div class="q-subsection__hdr">
+                <div class="q-subsection__indent" aria-hidden="true"></div>
+                <h3 class="q-subsection__name">${escHtml(ss.de)}</h3>
+                <div class="rating-hdr" aria-hidden="true">
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                </div>
+              </div>
+              <div class="q-list" role="list">${questionsHtml}</div>
+            </div>`;
+        }).join('');
+
+        return `
+          <section class="q-section" style="--border-color:${section.color}"
+                   aria-labelledby="title-${section.id}">
+            <div class="q-section__icon" aria-hidden="true">${ICONS[si]()}</div>
+            <div class="q-section__body">
+              <div class="q-section__head" style="--border-color:${section.color}">
+                <span class="q-section__num">${si + 1}</span>
+                <h2 class="q-section__title" id="title-${section.id}">${escHtml(section.de)}</h2>
+              </div>
+              ${subsectionsHtml}
+            </div>
+          </section>`;
+      }).join('');
+
+      // Attach change listeners
+      document.querySelectorAll('#form-root input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', onRadioChange);
+      });
+    }
+
+    // ── RENDER OPEN QUESTIONS ────────────────────────────────────
+    function renderOpenQuestions() {
+      const openRoot = document.getElementById('open-root');
+      if (!openRoot) return;
+
+      const questionsHtml = CMT.fremdReflection.map(q => `
+        <div class="fr__question">
+          <label class="fr__label" for="open-${q.id}">${escHtml(q.de)}</label>
+          <textarea class="fr__textarea" id="open-${q.id}" name="${q.id}"
+                    placeholder="Ihre Antwort…"></textarea>
+        </div>`).join('');
+
+      openRoot.innerHTML = `
+        <div class="fr-section">
+          <h2 class="fr__h2">Offene Fragen</h2>
+          <hr class="fr__divider">
+          ${questionsHtml}
+        </div>`;
+    }
+
+    // ── RADIO CHANGE HANDLER ─────────────────────────────────────
+    function onRadioChange() {
+      answeredQuestions = document.querySelectorAll('#form-root input[type="radio"]:checked').length;
+      const allAnswered = answeredQuestions >= totalQuestions;
+      document.getElementById('btn-submit').disabled = !allAnswered;
+      document.getElementById('validation-msg').classList.remove('visible');
+
+      // Update progress bar
+      const pct = totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0;
+      document.getElementById('progress-bar').style.width = pct + '%';
+    }
+
+    // ── ESCAPE HTML ──────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ── SUBMIT ───────────────────────────────────────────────────
+    async function submitForm() {
+      // Re-validate
+      const checked = document.querySelectorAll('#form-root input[type="radio"]:checked');
+      if (checked.length < totalQuestions) {
+        document.getElementById('validation-msg').classList.add('visible');
+        document.querySelector('#form-root input[type="radio"]:not(:checked)')
+          ?.closest('.q-row')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = 'Wird eingereicht…';
+
+      // Collect rating answers
+      const answers = {};
+      checked.forEach(r => { answers[r.name] = parseInt(r.value); });
+
+      // Collect open answers
+      const openAnswers = {};
+      document.querySelectorAll('#open-root textarea').forEach(ta => {
+        openAnswers[ta.name] = ta.value.trim();
+      });
+
+      try {
+        const result = await CMT.submitFremdbild(token, caseId, answers, openAnswers);
+        if (result && result.ok) {
+          showScreen('success-screen');
+        } else {
+          throw new Error('Submission returned non-ok result');
+        }
+      } catch (err) {
+        console.error('[fremdbild-form] submit error:', err);
+        btn.disabled = false;
+        btn.textContent = 'Feedback einreichen';
+        document.getElementById('validation-msg').textContent =
+          'Beim Einreichen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
+        document.getElementById('validation-msg').classList.add('visible');
+      }
+    }
+
+    // ── INIT ─────────────────────────────────────────────────────
+    async function init() {
+      if (!token || !caseId) {
+        showError('Der Link ist unvollständig. Bitte überprüfen Sie den Link in Ihrer E-Mail.');
+        return;
+      }
+
+      try {
+        // Validate token
+        const respondent = await CMT.getRespondentByToken(token);
+
+        if (!respondent) {
+          showError('Dieser Link ist ungültig oder wurde bereits verwendet.');
+          return;
+        }
+
+        // Check if already submitted
+        if (respondent.submitted) {
+          showScreen('submitted-screen');
+          return;
+        }
+
+        // Verify case matches
+        const respondentCaseId = respondent.case_id || respondent.caseId;
+        if (respondentCaseId !== caseId) {
+          showError('Der Link enthält inkonsistente Daten. Bitte wenden Sie sich an die einladende Person.');
+          return;
+        }
+
+        // Load case to get leader name
+        const caseData = await CMT.getCase(caseId);
+        if (!caseData) {
+          showError('Der zugehörige Fall wurde nicht gefunden. Möglicherweise wurde er gelöscht.');
+          return;
+        }
+
+        // Personalise the intro
+        const nameEl = document.getElementById('leader-name');
+        if (nameEl && caseData.name) {
+          nameEl.textContent = caseData.name;
+        }
+
+        // Render form and show it
+        renderForm();
+        renderOpenQuestions();
+        document.getElementById('progress-bar-wrap').style.display = 'block';
+        showScreen('form-wrapper');
+
+      } catch (err) {
+        console.error('[fremdbild-form] init error:', err);
+        showError('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.');
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
